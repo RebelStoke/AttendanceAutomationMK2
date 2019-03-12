@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="AttendanceAutomationMK2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/mssql-jdbc-7.0.0.jre8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jfoenix-8.0.8.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

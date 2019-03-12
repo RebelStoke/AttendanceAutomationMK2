@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="612.0" prefWidth="885.0" style="-fx-border-color: grey; -fx-border-width: 3;" stylesheets="@../../css/attendance.automation.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="attendance.automation.gui.controller.TeacherMainViewController">
+   <children>
+      <Label fx:id="welcomeLabel" layoutX="25.0" layoutY="35.0" prefHeight="47.0" prefWidth="356.0" text="Welcome Jeppe Moritz Led">
+         <font>
+            <Font size="28.0" />
+         </font></Label>
+      <JFXButton fx:id="btnMinimize" layoutX="818.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#minimizeButton" prefHeight="21.0" prefWidth="21.0" ripplerFill="#16a101" style="-fx-background-color: #65d355; -fx-background-radius: 36;" text=" " />
+      <AnchorPane fx:id="calendarPane" layoutX="420.0" layoutY="190.0" prefHeight="400.0" prefWidth="448.0" style="-fx-border-color: grey;">
+         <children>
+            <Label layoutX="128.0" layoutY="173.0" prefHeight="54.0" prefWidth="193.0" text="CALENDAR">
+               <font>
+                  <Font size="37.0" />
+               </font>
+            </Label>
+         </children></AnchorPane>
+      <ImageView fx:id="pic" fitHeight="93.0" fitWidth="200.0" layoutX="544.0" layoutY="82.0" opacity="0.89">
+         <image>
+            <Image url="@../images/easv-logo1.png" />
+         </image>
+      </ImageView>
+      <JFXComboBox fx:id="selectClass" layoutX="25.0" layoutY="144.0" onAction="#comboBoxOnAction" prefHeight="31.0" prefWidth="121.0" promptText="Select class" />
+      <JFXTextField fx:id="studentSearch" layoutX="212.0" layoutY="144.0" promptText="Search student" />
+      <JFXTreeTableView fx:id="tableView" layoutX="25.0" layoutY="190.0" onMouseClicked="#selectStudent" prefHeight="400.0" prefWidth="356.0">
+         <columnResizePolicy>
+            <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy></JFXTreeTableView>
+      <JFXButton id="kurwaxd" fx:id="btnExit" layoutX="847.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#exitButton" prefHeight="21.0" prefWidth="21.0" ripplerFill="#ee1a1a" style="-fx-background-color: #e75757; -fx-background-radius: 36;" styleClass="btnExitClass" text=" " />
+   </children>
+</AnchorPane>
