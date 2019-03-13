@@ -55,10 +55,7 @@ public class AAManager {
         this.te=ud.getTeacher();
     }
     public boolean isTeacher(){
-        if(te==null)
-            return false;
-        else
-            return true;
+        return te != null;
     
     }
     public void setStudent(int studentID) throws DALException, SQLException, IOException{

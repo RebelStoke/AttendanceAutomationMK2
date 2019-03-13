@@ -66,7 +66,6 @@ public class CalendarViewController implements Initializable {
     private Label sunday;
     private AAManager manager;
     private Date date = new Date();
-    private Date dateToPass;
     private Date dateToPassFinal;
     private int x;
     private int y;
@@ -76,22 +75,20 @@ public class CalendarViewController implements Initializable {
     private List<AttendanceUnit> attendance = new ArrayList<>();
     private List<Date> dateList = new ArrayList<>();
     private String buttonColor;
-    private StudentMainViewController SMWC = null;
-    private TeacherMainViewController TMWC = null;
+    private StudentMainViewController SMWC;
+    private TeacherMainViewController TMWC;
     private Student student;
     private HashMap<Integer, String> map;
     private HashMap<Integer, Date> map2;
     private String distinguisher;
-    private String formattedDateToPass;
 
-    public CalendarViewController(StudentMainViewController studentController, TeacherMainViewController teacherController, Student student) {
+    CalendarViewController(StudentMainViewController studentController, TeacherMainViewController teacherController, Student student) {
         SMWC = studentController;
         TMWC = teacherController;
         this.student = student;
         map = new HashMap<>();
         map2 = new HashMap<>();
-        distinguisher = new String();
-        formattedDateToPass = new String();
+
     }
 
     @Override
@@ -129,7 +126,7 @@ public class CalendarViewController implements Initializable {
 
     }
 
-    public void loadDaysLabel() {
+    private void loadDaysLabel() {
         monday = new Label();
         GridCalendar.add(monday, 0, 0);
         monday.setText("Mo");
@@ -154,7 +151,7 @@ public class CalendarViewController implements Initializable {
 
     }
 
-    public void attendanceUnitToCalendarList() {
+    private void attendanceUnitToCalendarList() {
         for (AttendanceUnit attendanceUnit : attendance) {
             System.out.println(attendanceUnit.getAttendanceDate());
             dateList.add(attendanceUnit.getAttendanceDate());
@@ -162,7 +159,7 @@ public class CalendarViewController implements Initializable {
 
     }
 
-    public void setMonthlyCalendar(Calendar cal2) {
+    private void setMonthlyCalendar(Calendar cal2) {
         double redButtons = 0;
         double greenButtons = 0;
 
@@ -188,11 +185,8 @@ public class CalendarViewController implements Initializable {
             }
 
             if (checkDateList(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR))) {
-                dateToPass = new GregorianCalendar(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).getTime();
-                formattedDateToPass = new SimpleDateFormat("yyyy-MM-dd").format(dateToPass);
-                dateToPassFinal = new java.sql.Date(dateToPass.getYear(), dateToPass.getMonth(), dateToPass.getDate());
-                System.out.println("TUTAJ: "+dateToPassFinal);
-                
+                datePass(cal);
+
 
                 buttonColor = "-fx-background-color: Green; -fx-font-size: 13px; -fx-background-radius: 0";
                 addButton(x, y, i);
@@ -200,10 +194,7 @@ public class CalendarViewController implements Initializable {
                 map.put(i, "Green");
                 map2.put(i, dateToPassFinal);
             } else if (cal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY && cal.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && cal.before(today) && cal.after(firstDay)) {
-                dateToPass = new GregorianCalendar(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).getTime();
-                formattedDateToPass = new SimpleDateFormat("yyyy-MM-dd").format(dateToPass);
-                dateToPassFinal = new java.sql.Date(dateToPass.getYear(), dateToPass.getMonth(), dateToPass.getDate());
-                System.out.println("TUTAJ: "+dateToPassFinal);
+                datePass(cal);
 
                 buttonColor = "-fx-background-color: Red; -fx-font-size: 13px; -fx-background-radius: 0";
                 addButton(x, y, i);
@@ -211,11 +202,8 @@ public class CalendarViewController implements Initializable {
                 map.put(i, "Red");
                 map2.put(i, dateToPassFinal);
             } else {
-                dateToPass = new GregorianCalendar(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).getTime();
-                formattedDateToPass = new SimpleDateFormat("yyyy-MM-dd").format(dateToPass);
-                dateToPassFinal = new java.sql.Date(dateToPass.getYear(), dateToPass.getMonth(), dateToPass.getDate());
-                System.out.println("TUTAJ: "+dateToPassFinal);
-                
+                datePass(cal);
+
                 buttonColor = "-fx-background-color: Grey; -fx-font-size: 13px; -fx-background-radius: 0";
                 addButton(x, y, i);
                 map.put(i, "Grey");
@@ -229,38 +217,38 @@ public class CalendarViewController implements Initializable {
         labelDate.setAlignment(Pos.TOP_RIGHT);
     }
 
-    public void addButton(int x, int y, int i) {
+    private void datePass(Calendar cal) {
+        //noinspection deprecation
+        dateToPassFinal = new java.sql.Date(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+
+    }
+
+    private void addButton(int x, int y, int i) {
         JFXButton butt = new JFXButton();
         butt.setText("" + i);
         butt.setStyle(buttonColor);
         butt.setMinSize(36, 36);
         butt.setMaxSize(36, 36);
-        butt.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent e) {
-                System.out.println(map2.get(i));
-                if (TMWC != null && !map.get(Integer.parseInt(butt.getText())).equals("Grey")) {
-                   // int dialogButton = JOptionPane.YES_NO_OPTION;
-                   // int dialogResult = JOptionPane.showConfirmDialog(null, "Do you want to change student attendance for this day?", "Attendance changer", dialogButton);
-                   Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to change student attendance for this day?", ButtonType.YES,ButtonType.NO);
-                   a.showAndWait();
-                   if (a.getResult() == ButtonType.YES) {
-                        if (map.get(Integer.parseInt(butt.getText())).equals("Green")) {
-                            buttonColor = "-fx-background-color: #ff2a2a; -fx-font-size: 13px; -fx-background-radius: 0";
-                            map.put(i, "Red");
-                            butt.setStyle(buttonColor);
-                            distinguisher = "Delete attendance";
-                            manager.changeAttendance(student.getId(), map2.get(i), distinguisher);
-                            System.out.println("Tuuu: " + student.getId());
-                        } else if (map.get(Integer.parseInt(butt.getText())).equals("Red")) {
-                            buttonColor = "-fx-background-color: Green; -fx-font-size: 13px; -fx-background-radius: 0";
-                            map.put(i, "Green");
-                            butt.setStyle(buttonColor);
-                            distinguisher = "Change attendance";
-                            manager.changeAttendance(student.getId(), map2.get(i), distinguisher);
-                            System.out.println("Tuuu: " + student.getId());
-                        }
+        butt.setOnAction(e -> {
+            System.out.println(map2.get(i));
+            if (TMWC != null && !map.get(Integer.parseInt(butt.getText())).equals("Grey")) {
+               Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to change student attendance for this day?", ButtonType.YES,ButtonType.NO);
+               a.showAndWait();
+               if (a.getResult() == ButtonType.YES) {
+                    if (map.get(Integer.parseInt(butt.getText())).equals("Green")) {
+                        buttonColor = "-fx-background-color: #ff2a2a; -fx-font-size: 13px; -fx-background-radius: 0";
+                        map.put(i, "Red");
+                        butt.setStyle(buttonColor);
+                        distinguisher = "Delete attendance";
+                        manager.changeAttendance(student.getId(), map2.get(i), distinguisher);
+                        System.out.println("Tuuu: " + student.getId());
+                    } else if (map.get(Integer.parseInt(butt.getText())).equals("Red")) {
+                        buttonColor = "-fx-background-color: Green; -fx-font-size: 13px; -fx-background-radius: 0";
+                        map.put(i, "Green");
+                        butt.setStyle(buttonColor);
+                        distinguisher = "Change attendance";
+                        manager.changeAttendance(student.getId(), map2.get(i), distinguisher);
+                        System.out.println("Tuuu: " + student.getId());
                     }
                 }
             }
@@ -268,7 +256,7 @@ public class CalendarViewController implements Initializable {
         GridCalendar.add(butt, x, y);
     }
 
-    public boolean checkDateList(int day, int month, int year) {
+    private boolean checkDateList(int day, int month, int year) {
         Date date2 = new GregorianCalendar(year, month, day).getTime();
         String formattedDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date2);
         for (Date date : dateList) {

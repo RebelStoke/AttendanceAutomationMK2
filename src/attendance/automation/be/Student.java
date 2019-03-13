@@ -48,7 +48,7 @@ public class Student extends RecursiveTreeObject<Student>{
         setAttendanceOfStudent();
         System.out.println("attendance of student with id:"+id+": "+getAttendanceOfStudent());
     }
-    public void loadStudentContent() throws DALException, IOException{
+    private void loadStudentContent() throws DALException {
     try{
         Connection con = cp.getConnection();
         Statement statement = con.createStatement();
@@ -66,8 +66,8 @@ public class Student extends RecursiveTreeObject<Student>{
     
     }
 
-    public void setAttendanceOfStudent() throws DALException {
-        attendanceOfStudent = Integer.toString((int)(manager.attendanceRate(this)*100))+"%";
+    private void setAttendanceOfStudent() throws DALException {
+        attendanceOfStudent = (int) (manager.attendanceRate(this) * 100) +"%";
                 
     }
     
@@ -105,7 +105,7 @@ public class Student extends RecursiveTreeObject<Student>{
         this.classNum = classNum;
     }
     
-    public void setClassName(String className){
+    void setClassName(String className){
         this.className=className;
     }
     public String getClassName(){

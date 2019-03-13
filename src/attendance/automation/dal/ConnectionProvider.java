@@ -18,7 +18,7 @@ public class ConnectionProvider
     private final SQLServerDataSource ds;
     private static final String PROP_FILE = "src\\attendance\\automation\\dal\\credentials.txt";
 
-    public ConnectionProvider() throws FileNotFoundException, IOException
+    public ConnectionProvider() throws IOException
     {
         Properties databaseProperties = new Properties();
         databaseProperties.load(new FileInputStream(PROP_FILE));

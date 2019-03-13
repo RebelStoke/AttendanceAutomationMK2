@@ -60,7 +60,7 @@ public class ForgotPasswordViewController implements Initializable {
     private void goBackToLogInWindow(ActionEvent event) throws IOException {
         Parent root1;
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/attendance/automation/gui/view/LoginView.fxml"));
-        root1 = (Parent) fxmlLoader.load();
+        root1 = fxmlLoader.load();
         Stage stage = (Stage) resetWindow.getScene().getWindow();
         stage.close();
         

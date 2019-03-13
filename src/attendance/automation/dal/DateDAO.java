@@ -39,7 +39,7 @@ public class DateDAO {
         return false;
     }
 
-    public boolean isMarkedAlready(int studentID, java.sql.Date sqlDate) throws DALException {
+    private boolean isMarkedAlready(int studentID, java.sql.Date sqlDate) throws DALException {
         try {
             String sql = "SELECT * FROM StudentAttendance WHERE studentID=? AND Date=?";
             Connection con = cp.getConnection();
@@ -48,9 +48,7 @@ public class DateDAO {
             ppst.setInt(1, studentID);
             ppst.execute();
             ResultSet rs = ppst.getResultSet();
-            while (rs.next()) {
-                return true;
-            }
+            while (rs.next()) return true;
             return false;
         } catch (SQLException ex) {
             throw new DALException(ex);
@@ -58,7 +56,7 @@ public class DateDAO {
 
     }
 
-    public void markIt(int studentID, java.sql.Date sqlDate) throws DALException {
+    private void markIt(int studentID, java.sql.Date sqlDate) throws DALException {
         try {
 
             Connection con = cp.getConnection();
@@ -99,7 +97,7 @@ public class DateDAO {
                 String sql = "DELETE FROM StudentAttendance WHERE date=? AND studentID=?";
                 System.out.println(date);
                 System.out.println(studentID);
-                System.out.println((java.sql.Date) date);
+                System.out.println(date);
                 PreparedStatement ppst = con.prepareStatement(sql);
                 ppst.setDate(1, (java.sql.Date) date);
                 ppst.setInt(2, studentID);

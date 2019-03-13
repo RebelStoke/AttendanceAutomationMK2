@@ -5,6 +5,7 @@
  */
 package attendance.automation.gui.controller;
 
+import attendance.automation.WindowOpener;
 import attendance.automation.bll.AAManager;
 import attendance.automation.dal.DALException;
 import com.jfoenix.controls.JFXButton;
@@ -39,7 +40,7 @@ import javafx.util.Duration;
 /**
  * FXML Controller class
  *
- * @author Tothko
+ * @author RebelStoke
  */
 public class LoginViewController implements Initializable {
     
@@ -51,6 +52,8 @@ public class LoginViewController implements Initializable {
     private double xOffset = 0;
     private double yOffset = 0;
     private Label loginFailed;
+    private Preferences preferences;
+    private WindowOpener opener;
     @FXML
     private ImageView pic;
     @FXML
@@ -61,20 +64,18 @@ public class LoginViewController implements Initializable {
     private AnchorPane loginWindow;
     @FXML
     private CheckBox rememberUsernameCheckBox;
-    
-    Preferences preferences;
     @FXML
     private JFXButton btnMinimize;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       rememberPassword();
+        rememberPassword();
         try {
             manager = AAManager.getInstance();
         } catch (IOException ex) {
             Logger.getLogger(LoginViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         fadeIn(btnExit);
         fadeIn(btnLogin);
         fadeIn(pic);
@@ -89,7 +90,7 @@ public class LoginViewController implements Initializable {
     
     
     @FXML
-    private void loginMethod(ActionEvent event) throws DALException, IOException, InterruptedException, BackingStoreException {
+    private void loginMethod(ActionEvent event) throws DALException, IOException, BackingStoreException {
         String login = loginField.getText();
         String password = passwordField.getText();
         login(login, password);
@@ -128,70 +129,27 @@ public class LoginViewController implements Initializable {
                 teacherMainViewInitialization();
             }
             
-            Stage stage2 = (Stage) loginField.getScene().getWindow();
-            stage2.close();
+            Stage stage = (Stage) loginField.getScene().getWindow();
+            stage.close();
         } else {
             loginFailed.setText("Login failed!");
         }
     }
     
     private void studentMainViewInitialization() throws IOException {
-        Parent root1;
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/attendance/automation/gui/view/StudentMainView.fxml"));
-        root1 = (Parent) fxmlLoader.load();
-        Stage stage = new Stage();
-        stage.initStyle(StageStyle.UNDECORATED);
-        
-        Scene scene = new Scene(root1);
-        
-        stage.setScene(scene);
-        stage.show();
-        
-        root1.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                xOffset = event.getSceneX();
-                yOffset = event.getSceneY();
-            }
-        });
-        root1.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                stage.setX(event.getScreenX() - xOffset);
-                stage.setY(event.getScreenY() - yOffset);
-            }
-        });
-        
+        opener = new WindowOpener(fxmlLoader);
     }
     
     private void teacherMainViewInitialization() throws IOException {
-        Parent root1;
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/attendance/automation/gui/view/TeacherMainView.fxml"));
-        root1 = (Parent) fxmlLoader.load();
-        Stage stage = new Stage();
-        stage.initStyle(StageStyle.UNDECORATED);
-        
-        Scene scene = new Scene(root1);
-        
-        stage.setScene(scene);
-        stage.show();
-        
-        root1.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                xOffset = event.getSceneX();
-                yOffset = event.getSceneY();
-            }
-        });
-        root1.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                stage.setX(event.getScreenX() - xOffset);
-                stage.setY(event.getScreenY() - yOffset);
-            }
-        });
+        opener = new WindowOpener(fxmlLoader);
     }
-    
+    @FXML
+    private void forgotPasswordButt(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/attendance/automation/gui/view/ForgotPasswordView.fxml"));
+        opener = new WindowOpener(fxmlLoader);
+    }
     @FXML
     private void loginStudent(ActionEvent event) throws DALException, IOException, BackingStoreException {
         login("JanToth", "1234");
@@ -209,35 +167,7 @@ public class LoginViewController implements Initializable {
         exitFade.play();
     }
     
-    @FXML
-    private void forgotPasswordButt(ActionEvent event) throws IOException {
-        Parent root1;
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/attendance/automation/gui/view/ForgotPasswordView.fxml"));
-        root1 = (Parent) fxmlLoader.load();
-        Stage stage = (Stage) loginWindow.getScene().getWindow();
-        stage.close();
-        
-        Stage stage2 = new Stage();
-        stage2.initStyle(StageStyle.UNDECORATED);
-        Scene scene = new Scene(root1);
-        stage2.setScene(scene);
-        stage2.show();
-        
-        root1.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                xOffset = event.getSceneX();
-                yOffset = event.getSceneY();
-            }
-        });
-        root1.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                stage.setX(event.getScreenX() - xOffset);
-                stage.setY(event.getScreenY() - yOffset);
-            }
-        });
-    }
+
 
     @FXML
     private void minimizeButton(ActionEvent event) {
