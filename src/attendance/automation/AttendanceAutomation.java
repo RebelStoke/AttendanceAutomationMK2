@@ -19,12 +19,12 @@ import javafx.stage.StageStyle;
  * @author Revy
  */
 public class AttendanceAutomation extends Application {
-    private WindowOpener opener;
+
 
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("gui/view/LoginView.fxml"));
-        opener = new WindowOpener(loader);
+        WindowOpener opener = new WindowOpener(loader);
     }
 
     /**

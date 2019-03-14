@@ -89,7 +89,7 @@ public class DateDAO {
         }
     }
 
-    public void changeAttendance(int studentID, Date date, String distinguisher) {
+    public void changeAttendance(int studentID, java.sql.Date date, String distinguisher) {
         try {
             Connection con = cp.getConnection();
             if ("Delete attendance".equals(distinguisher)) {
@@ -99,7 +99,7 @@ public class DateDAO {
                 System.out.println(studentID);
                 System.out.println(date);
                 PreparedStatement ppst = con.prepareStatement(sql);
-                ppst.setDate(1, (java.sql.Date) date);
+                ppst.setDate(1, date);
                 ppst.setInt(2, studentID);
                 ppst.execute();
                 
@@ -107,7 +107,7 @@ public class DateDAO {
                 System.out.println("Is it working2?");
                 String sql = "INSERT INTO StudentAttendance VALUES(?,?)";
                 PreparedStatement ppst = con.prepareStatement(sql);
-                ppst.setDate(1, (java.sql.Date) date);
+                ppst.setDate(1, date);
                 ppst.setInt(2, studentID);
                 ppst.execute();
             }

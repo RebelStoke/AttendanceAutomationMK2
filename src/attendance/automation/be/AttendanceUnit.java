@@ -11,6 +11,7 @@ import java.util.Date;
  *
  * @author Revy
  */
+@SuppressWarnings("PublicMethodNotExposedInInterface")
 public class AttendanceUnit {
     private int studentID;
     private Date attendanceDate;

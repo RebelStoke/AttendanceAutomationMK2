@@ -14,7 +14,30 @@
         <URL value="@/attendance/automation/css/calendar.css" />
     </stylesheets>
    <children>
-      <GridPane fx:id="GridCalendar" layoutX="14.0" layoutY="72.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="327.0" prefWidth="423.0">
+      <GridPane layoutX="14.0" layoutY="57.0" prefHeight="42.0" prefWidth="423.0">
+        <children>
+            <Label text="Mo" />
+            <Label GridPane.columnIndex="1" text="Tu" />
+            <Label GridPane.columnIndex="2" text="We" />
+            <Label GridPane.columnIndex="3" text="Th" />
+            <Label GridPane.columnIndex="4" text="Fr" />
+            <Label GridPane.columnIndex="5" text="Sa" />
+            <Label GridPane.columnIndex="6" text="Su" />
+         </children>
+        <columnConstraints>
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+         <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+      </GridPane>
+      <GridPane layoutX="14.0" layoutY="103.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="296.0" prefWidth="423.0" fx:id="GridCalendar">
         <columnConstraints>
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -31,11 +54,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
-         <children>
-            <JFXButton maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="8.0" prefWidth="0.0" style="-fx-background-size: 2; -fx-background-color: BLACK;" GridPane.rowIndex="1" />
-         </children>
       </GridPane>
       <Label fx:id="labelDate" alignment="CENTER" layoutX="110.0" layoutY="16.0" prefHeight="31.0" prefWidth="229.0" text="Month name" textAlignment="CENTER" AnchorPane.topAnchor="16.0">
          <font>

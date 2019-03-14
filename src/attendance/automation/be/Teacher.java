@@ -19,7 +19,7 @@ import java.util.List;
  *
  * @author Revy
  */
-public class Teacher {
+public class Teacher implements Person {
     private String name;
     private int id;
     private List<Class> listOfClasses;
