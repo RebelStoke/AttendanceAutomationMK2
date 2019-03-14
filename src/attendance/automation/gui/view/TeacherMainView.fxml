@@ -37,6 +37,6 @@
          <columnResizePolicy>
             <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy></JFXTreeTableView>
-      <JFXButton style="-fx-background-color: #e75757; -fx-background-radius: 36;" layoutX="847.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#exitButton" prefHeight="21.0" prefWidth="21.0" ripplerFill="#ee1a1a" styleClass="btnExitClass" text=" " fx:id="btnExit" />
+      <JFXButton style="-fx-background-color: #e75756; -fx-background-radius: 36;" layoutX="847.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#exitButton" prefHeight="21.0" prefWidth="21.0" ripplerFill="#ee1a1a" styleClass="btnExitClass" text=" " fx:id="btnExit" />
    </children>
 </AnchorPane>
