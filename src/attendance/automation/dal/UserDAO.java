@@ -5,9 +5,7 @@
  */
 package attendance.automation.dal;
 
-import attendance.automation.be.Person;
-import attendance.automation.be.Student;
-import attendance.automation.be.Teacher;
+import attendance.automation.be.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -21,7 +19,7 @@ import java.sql.Statement;
 public class UserDAO {
 
   private final ConnectionProvider cp;
-  private Person person;
+   private Person person;
 
 
   public UserDAO() throws IOException {
@@ -77,6 +75,8 @@ public class UserDAO {
       person = new Student(name, classNum, id);
     }
   }
+
+
 
 
 

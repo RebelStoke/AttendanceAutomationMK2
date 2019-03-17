@@ -5,6 +5,7 @@
  */
 package attendance.automation.be;
 
+import attendance.automation.bll.AAManager;
 import attendance.automation.dal.ConnectionProvider;
 import attendance.automation.dal.DALException;
 import java.io.IOException;
@@ -23,35 +24,19 @@ public class Teacher implements Person {
     private String name;
     private int id;
     private List<Class> listOfClasses;
-    private final ConnectionProvider cp;
-    
+    private AAManager manager;
     public Teacher(String name, int id) throws IOException, DALException{
         this.name=name;
         this.id=id;
         listOfClasses = new ArrayList<>();
-        cp = new ConnectionProvider();
-        loadTeacherContent();
+        manager = AAManager.getInstance();
+        loadTeacherContent(name);
     }
-    
-    public void loadTeacherContent() throws DALException, IOException{
-        
-        try{
-        Connection con = cp.getConnection();
-        Statement statement = con.createStatement();
-        String str = "SELECT Class.ID, ClassName FROM Teacher, TeachersClass, Class WHERE Teacher.ID=TeachersClass.TeacherID AND TeachersClass.ClassID = Class.ID AND UserName='"+name+"'";
-        ResultSet rs = statement.executeQuery(str);
-        while(rs.next()){
-             String name1 = rs.getString("ClassName");
-             System.out.println(name1);
-             int number = rs.getInt("ID");
-             listOfClasses.add(new Class(name1,number));}
-        }
-        
-        catch (SQLException ex) {
-            throw new DALException (ex);
-        }
+
+    public void loadTeacherContent(String userName) throws DALException, IOException{
+        listOfClasses.addAll(manager.loadTeacherContent(userName));
     }
-   
+
     public String getName()
     {
         return name;

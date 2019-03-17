@@ -5,19 +5,19 @@
  */
 package attendance.automation.bll;
 
-import attendance.automation.be.AttendanceUnit;
+import attendance.automation.be.Class;
 import attendance.automation.be.Person;
 import attendance.automation.be.Student;
 import attendance.automation.be.Teacher;
-import attendance.automation.dal.DALException;
-import attendance.automation.dal.DateDAO;
-import attendance.automation.dal.UserDAO;
+import attendance.automation.dal.*;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Revy
@@ -27,11 +27,17 @@ public class AAManager {
   private static AAManager manager;
   private UserDAO ud;
   private DateDAO dd;
+  private ClassDAO cd;
+  private TeacherDAO td;
+  private StudentDAO sd;
   private Person person;
 
   public AAManager() throws IOException {
     ud = new UserDAO();
     dd = new DateDAO();
+    cd = new ClassDAO();
+    sd = new StudentDAO();
+    td = new TeacherDAO();
   }
 
   public static AAManager getInstance() throws IOException {
@@ -74,12 +80,10 @@ public class AAManager {
 
   public double attendanceRate(Student student) throws DALException {
     double schoolDays = 0;
-    for (AttendanceUnit attendanceUnit : student.getAttendance()) {
-      System.out.println(attendanceUnit.getAttendanceDate().toString());
-    }
     Calendar c1 = Calendar.getInstance();
     Calendar c2 = (Calendar) c1.clone();
-    Date date = student.getAttendance().get(0).getAttendanceDate();
+   // Date date = student.getAttendance().get(0).getAttendanceDate();
+      Date date = student.getAttendance().get(0);
     c2.setTime(date);
     while (c2.before(c1) || c2.equals(c1)) {
       if (c2.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY
@@ -88,12 +92,23 @@ public class AAManager {
       }
       c2.add(Calendar.DATE, 1);
     }
-    System.out.println(schoolDays);
     return dd.getAttendancesForThisMonth(student.getId()) / schoolDays;
   }
 
   public void changeAttendance(int studentID, java.sql.Date date, String distinguisher) {
     dd.changeAttendance(studentID, date, distinguisher);
+  }
+
+
+  public List<Class> loadTeacherContent(String userName) throws DALException, IOException {
+    return td.loadTeacherContent(userName);
+  }
+
+public List<Date> loadStudentContent(String userName, List<Date> listOfAttendance) throws DALException {
+    return sd.loadStudentContent(userName,listOfAttendance);
+}
+  public List<Student> loadClassContent(String className) throws DALException, IOException{
+    return cd.loadClassContent(className);
   }
 
 }

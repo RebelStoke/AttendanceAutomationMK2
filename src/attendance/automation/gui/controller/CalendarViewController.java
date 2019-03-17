@@ -5,7 +5,6 @@
  */
 package attendance.automation.gui.controller;
 
-import attendance.automation.be.AttendanceUnit;
 import attendance.automation.be.Person;
 import attendance.automation.be.Student;
 import attendance.automation.bll.AAManager;
@@ -51,7 +50,7 @@ public class CalendarViewController implements Initializable {
   private Calendar calendar;
   private Calendar today;
   private Calendar firstDay;
-  private List<AttendanceUnit> attendance = new ArrayList<>();
+  private List<Date> attendance = new ArrayList<>();
   private List<Date> dateList = new ArrayList<>();
   private String buttonColor;
   private StudentMainViewController SMWC;
@@ -72,7 +71,7 @@ public class CalendarViewController implements Initializable {
       calendar = Calendar.getInstance();
       today = (Calendar) calendar.clone();
       firstDay = (Calendar) calendar.clone();
-      firstDay.setTime(student.getAttendance().get(0).getAttendanceDate());
+      firstDay.setTime(student.getAttendance().get(0));
       attendance = student.getAttendance();
       attendanceUnitToCalendarList();
       setMonthlyCalendar(calendar);
@@ -101,10 +100,9 @@ public class CalendarViewController implements Initializable {
   }
 
   private void attendanceUnitToCalendarList() {
-    for (AttendanceUnit attendanceUnit : attendance) {
-      dateList.add(attendanceUnit.getAttendanceDate());
-    }
-
+  for (Date date : attendance) {
+       dateList.add(date);
+      }
   }
 
   private void setMonthlyCalendar(Calendar calendar) {

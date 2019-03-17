@@ -93,18 +93,13 @@ public class DateDAO {
         try {
             Connection con = cp.getConnection();
             if ("Delete attendance".equals(distinguisher)) {
-                System.out.println("Is it working1?");
                 String sql = "DELETE FROM StudentAttendance WHERE date=? AND studentID=?";
-                System.out.println(date);
-                System.out.println(studentID);
-                System.out.println(date);
                 PreparedStatement ppst = con.prepareStatement(sql);
                 ppst.setDate(1, date);
                 ppst.setInt(2, studentID);
                 ppst.execute();
                 
             } else if ("Change attendance".equals(distinguisher)) {
-                System.out.println("Is it working2?");
                 String sql = "INSERT INTO StudentAttendance VALUES(?,?)";
                 PreparedStatement ppst = con.prepareStatement(sql);
                 ppst.setDate(1, date);
