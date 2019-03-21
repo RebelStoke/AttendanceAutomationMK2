@@ -2,10 +2,54 @@
     
     
 }
+.MainAnchorPane{
+    -fx-border-color: Grey;
+    -fx-border-width: 3;
+}
+.Calendar{
+    -fx-border-color: Grey;
+}
 
 .tree-table-view .tree-table-cell{
     -fx-alignment: CENTER;
     
 }
 
+.minimiseButton{
+    -fx-background-color:  #65d355;
+    -fx-background-radius: 36;
+}
+.minimiseButton:hover{
+    -fx-background-color: #4CC728;
+}
 
+.closeButton{
+    -fx-background-color:  #e75757;
+    -fx-background-radius: 36;
+}
+.closeButton:hover{
+     -fx-background-color:  #ed1a1a;
+
+ }
+
+
+#forgotPasswordButton:hover{
+    -fx-background-color: #CAC9D1;
+}
+#logInButton{
+    -fx-background-color:  #569CFF;
+}
+#logInButton:hover{
+    -fx-background-color: #0560BD;
+}
+
+.hooverOnLoginView:hover{
+    -fx-background-color: #D6D5DE;
+}
+
+#forgotPasswordAnchorPane{
+    -fx-min-width: 288;
+    -fx-min-height: 282;
+    -fx-max-width: 331;
+    -fx-max-height: 324;
+}

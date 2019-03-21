@@ -49,7 +49,7 @@ public class ForgotPasswordViewController implements Initializable {
 
 
     @FXML
-    private void closeWindow() {
+    private void closeWindow(ActionEvent event) {
         Stage stage = (Stage) resetWindow.getScene().getWindow();
         stage.close();
     }
@@ -59,7 +59,8 @@ public class ForgotPasswordViewController implements Initializable {
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/attendance/automation/gui/view/LoginView.fxml"));
         new WindowOpener(fxmlLoader);
-        closeWindow();
+        Stage stage = (Stage) resetWindow.getScene().getWindow();
+        stage.close();
     }
     
 private void fadeIn(Node node)

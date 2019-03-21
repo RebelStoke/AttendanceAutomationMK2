@@ -11,14 +11,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" style="-fx-border-color: grey; -fx-border-width: 3;" id="AnchorPane" prefHeight="612.0" prefWidth="885.0" stylesheets="@../../css/attendance.automation.css" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="attendance.automation.gui.controller.TeacherMainViewController">
+<AnchorPane prefHeight="612.0" prefWidth="885.0" styleClass="MainAnchorPane" stylesheets="@../../css/attendance.automation.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="attendance.automation.gui.controller.TeacherMainViewController">
    <children>
       <Label fx:id="welcomeLabel" layoutX="25.0" layoutY="35.0" prefHeight="47.0" prefWidth="356.0" text="Welcome Jeppe Moritz Led">
          <font>
             <Font size="28.0" />
          </font></Label>
-      <JFXButton fx:id="btnMinimize" layoutX="818.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#minimizeButton" prefHeight="21.0" prefWidth="21.0" ripplerFill="#16a101" style="-fx-background-color: #65d355; -fx-background-radius: 36;" text=" " />
-      <AnchorPane style="-fx-border-color: grey;" layoutX="420.0" layoutY="190.0" prefHeight="400.0" prefWidth="448.0" fx:id="paneCalendar">
+      <JFXButton fx:id="btnMinimize" buttonType="RAISED" layoutX="818.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#minimizeButton" prefHeight="21.0" prefWidth="21.0" ripplerFill="WHITE" styleClass="minimiseButton" text=" " />
+      <AnchorPane fx:id="paneCalendar" layoutX="420.0" layoutY="190.0" prefHeight="400.0" prefWidth="448.0" styleClass="Calendar">
          <children>
             <Label layoutX="128.0" layoutY="173.0" prefHeight="54.0" prefWidth="193.0" text="CALENDAR">
                <font>
@@ -37,6 +37,6 @@
          <columnResizePolicy>
             <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy></JFXTreeTableView>
-      <JFXButton style="-fx-background-color: #e75756; -fx-background-radius: 36;" layoutX="847.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#exitButton" prefHeight="21.0" prefWidth="21.0" ripplerFill="#ee1a1a" styleClass="btnExitClass" text=" " fx:id="btnExit" />
+      <JFXButton fx:id="btnExit" buttonType="RAISED" layoutX="847.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#exitButton" prefHeight="21.0" prefWidth="21.0" ripplerFill="WHITE" styleClass="closeButton" text=" " />
    </children>
 </AnchorPane>

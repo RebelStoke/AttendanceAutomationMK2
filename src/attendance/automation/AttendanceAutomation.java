@@ -23,8 +23,24 @@ public class AttendanceAutomation extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+
+
+   //     FXMLLoader loader = new FXMLLoader(getClass().getResource("gui/view/LoginView.fxml"));
+  //      WindowOpener opener = new WindowOpener(loader);
+
+
+////
+        stage.initStyle(StageStyle.UNDECORATED);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("gui/view/LoginView.fxml"));
-        WindowOpener opener = new WindowOpener(loader);
+        final Parent root = loader.load();
+        final Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setMinWidth(324);
+        stage.setMinHeight(400);
+       // stage.minWidthProperty().bind(scene.heightProperty().multiply(1.5));
+       // stage.minHeightProperty().bind(scene.widthProperty().divide(1.5));
+        stage.show();
+
     }
 
     /**

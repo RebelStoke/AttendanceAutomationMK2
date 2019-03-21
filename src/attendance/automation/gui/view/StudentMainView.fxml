@@ -5,14 +5,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="736.0" prefWidth="534.0" style="-fx-border-color: grey; -fx-border-width: 3;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="attendance.automation.gui.controller.StudentMainViewController">
+<AnchorPane prefHeight="736.0" prefWidth="534.0" styleClass="MainAnchorPane" stylesheets="@../../css/attendance.automation.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="attendance.automation.gui.controller.StudentMainViewController">
     <children>
       <Label fx:id="welcomeLabel" alignment="CENTER" layoutX="85.0" layoutY="42.0" prefHeight="39.0" prefWidth="375.0" text="Welcome, JanToth">
          <font>
             <Font size="27.0" />
          </font>
       </Label>
-      <AnchorPane fx:id="paneCalendar" layoutX="39.0" layoutY="324.0" prefHeight="290.0" prefWidth="454.0" style="-fx-border-color: grey;">
+      <AnchorPane fx:id="paneCalendar" layoutX="39.0" layoutY="324.0" prefHeight="290.0" prefWidth="454.0" styleClass="Calendar">
          <children>
             <Label alignment="CENTER" layoutX="127.0" layoutY="120.0" prefHeight="50.0" prefWidth="200.0" text="CALENDAR">
                <font>
@@ -31,7 +31,7 @@
          </font>
       </JFXButton>
       <Label fx:id="attendanceLabel" alignment="CENTER" layoutX="123.0" layoutY="265.0" prefHeight="21.0" prefWidth="287.0" textFill="RED" />
-      <JFXButton id="kurwaxd" fx:id="btnExit" layoutX="499.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#closeButton" prefHeight="21.0" prefWidth="21.0" ripplerFill="#ed1a1a" style="-fx-background-radius: 36; -fx-background-color: #e75757;" styleClass="btnExitClass" text=" " />
-      <JFXButton fx:id="btnMinimize" layoutX="472.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#minimizeButton" prefHeight="21.0" prefWidth="21.0" ripplerFill="#16a101" style="-fx-background-color: #65d355; -fx-background-radius: 36;" text=" " />
+      <JFXButton fx:id="btnExit" buttonType="RAISED" layoutX="499.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#closeButton" prefHeight="21.0" prefWidth="21.0" ripplerFill="WHITE" styleClass="closeButton" text=" " />
+      <JFXButton fx:id="btnMinimize" buttonType="RAISED" layoutX="472.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#minimizeButton" prefHeight="21.0" prefWidth="21.0" ripplerFill="WHITE" styleClass="minimiseButton" text=" " />
     </children>
 </AnchorPane>

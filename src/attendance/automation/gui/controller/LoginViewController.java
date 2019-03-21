@@ -28,6 +28,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 /**
@@ -142,6 +143,7 @@ public class LoginViewController implements Initializable {
         getClass().getResource("/attendance/automation/gui/view/ForgotPasswordView.fxml"));
     new WindowOpener(fxmlLoader);
     Stage stage = (Stage) loginField.getScene().getWindow();
+    //stage.initStyle(StageStyle.UNDECORATED);
     stage.close();
   }
 
