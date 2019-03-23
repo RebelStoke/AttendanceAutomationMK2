@@ -5,6 +5,7 @@
  */
 package attendance.automation.gui.controller;
 
+import attendance.automation.WindowOpener;
 import attendance.automation.be.Class;
 import attendance.automation.be.Person;
 import attendance.automation.be.Student;
@@ -159,12 +160,17 @@ public class TeacherMainViewController implements Initializable {
     FXMLLoader loader = new FXMLLoader(
         getClass().getResource("/attendance/automation/gui/view/CalendarView.fxml"));
     loader.setController(calendarController);
-
     Pane pane = loader.load();
-
     paneCalendar.getChildren().clear();
     paneCalendar.getChildren().add(pane);
   }
 
+
+  public void logOut(ActionEvent event) throws IOException {
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/attendance/automation/gui/view/LoginView.fxml"));
+    WindowOpener opener = new WindowOpener(loader);
+    Stage stage = (Stage) welcomeLabel.getScene().getWindow();
+    stage.close();
+  }
 
 }

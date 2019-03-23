@@ -31,15 +31,19 @@ public class AttendanceAutomation extends Application {
 
 ////
         stage.initStyle(StageStyle.UNDECORATED);
+        /*
         FXMLLoader loader = new FXMLLoader(getClass().getResource("gui/view/LoginView.fxml"));
         final Parent root = loader.load();
         final Scene scene = new Scene(root);
         stage.setScene(scene);
+        */
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("gui/view/LoginView.fxml"));
+        WindowOpener opener = new WindowOpener(loader);
         stage.setMinWidth(324);
         stage.setMinHeight(400);
        // stage.minWidthProperty().bind(scene.heightProperty().multiply(1.5));
        // stage.minHeightProperty().bind(scene.widthProperty().divide(1.5));
-        stage.show();
+      //  stage.show();
 
     }
 

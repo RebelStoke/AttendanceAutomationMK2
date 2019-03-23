@@ -70,5 +70,9 @@ private void fadeIn(Node node)
         exitFade.setToValue(1);
         exitFade.play();
     }
-    
+
+    public void minimiseButton(ActionEvent event) {
+        Stage stage = (Stage) btnExit.getScene().getWindow();
+        stage.setIconified(true);
+    }
 }

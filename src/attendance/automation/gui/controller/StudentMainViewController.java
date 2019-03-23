@@ -5,6 +5,7 @@
  */
 package attendance.automation.gui.controller;
 
+import attendance.automation.WindowOpener;
 import attendance.automation.be.Student;
 import attendance.automation.bll.AAManager;
 import attendance.automation.dal.DALException;
@@ -135,6 +136,13 @@ public class StudentMainViewController implements Initializable {
   private void minimizeButton(ActionEvent event) {
     Stage stage = (Stage) welcomeLabel.getScene().getWindow();
     stage.setIconified(true);
+  }
+
+  public void logOut(ActionEvent event) throws IOException {
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/attendance/automation/gui/view/LoginView.fxml"));
+    WindowOpener opener = new WindowOpener(loader);
+    Stage stage = (Stage) welcomeLabel.getScene().getWindow();
+    stage.close();
   }
 
 }

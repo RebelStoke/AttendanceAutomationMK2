@@ -16,16 +16,21 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+
+import com.sun.corba.se.impl.logging.POASystemException;
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -83,10 +88,12 @@ public class LoginViewController implements Initializable {
 
   @FXML
   private void loginMethod(ActionEvent event)
-      throws DALException, IOException, BackingStoreException {
-    String login = loginField.getText();
-    String password = passwordField.getText();
-    login(login, password);
+          throws IOException, BackingStoreException, DALException {
+      String login = loginField.getText();
+      String password = passwordField.getText();
+      login(login, password);
+
+
 
   }
 
@@ -121,7 +128,11 @@ public class LoginViewController implements Initializable {
       Stage stage = (Stage) loginField.getScene().getWindow();
       stage.close();
     } else {
-      loginFailed.setText("Login failed!");
+      loginField.clear();
+      passwordField.clear();
+      loginField.setPromptText("Wrong login/password");
+      loginField.setAlignment(Pos.BASELINE_LEFT);
+      loginField.setStyle("-fx-prompt-text-fill: red; -fx-prompt-font: 10px");
     }
   }
 
@@ -150,13 +161,15 @@ public class LoginViewController implements Initializable {
   @FXML
   private void loginStudent(ActionEvent event)
       throws DALException, IOException, BackingStoreException {
-    login("JanToth", "1234");
+    loginField.setText("JanToth");
+    passwordField.setText("1234");
   }
 
   @FXML
   private void loginTeacher(ActionEvent event)
       throws DALException, IOException, BackingStoreException {
-    login("MarekStancik", "cplusplus");
+    loginField.setText("MarekStancik");
+    passwordField.setText("cplusplus");
   }
 
   private void fadeIn(Node node) {
@@ -172,5 +185,13 @@ public class LoginViewController implements Initializable {
     Stage stage = (Stage) loginField.getScene().getWindow();
     stage.setIconified(true);
   }
+
+  public void clearPromptText(KeyEvent keyEvent) {
+    loginField.setPromptText("Login/Email");
+    loginField.setAlignment(Pos.CENTER);
+    loginField.setStyle("-fx-prompt-text-fill: grey;");
+  }
+
+
 
 }
