@@ -8,6 +8,7 @@ package attendance.automation.gui.controller;
 import attendance.automation.be.Person;
 import attendance.automation.be.Student;
 import attendance.automation.bll.AAManager;
+import attendance.automation.dal.DALException;
 import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.net.URL;
@@ -56,7 +57,9 @@ public class CalendarViewController implements Initializable {
   private StudentMainViewController SMWC;
   private Student student;
   private Map<Integer, java.sql.Date> map;
-
+  private double redButtons = 0;
+  private double greenButtons = 0;
+  private Calendar cal;
   CalendarViewController(StudentMainViewController studentController, Person student) {
     SMWC = studentController;
     this.student = (Student) student;
@@ -67,7 +70,7 @@ public class CalendarViewController implements Initializable {
   @Override
   public void initialize(URL url, ResourceBundle rb) {
     try {
-      manager = new AAManager();
+        manager = new AAManager();
       calendar = Calendar.getInstance();
       today = (Calendar) calendar.clone();
       firstDay = (Calendar) calendar.clone();
@@ -81,16 +84,20 @@ public class CalendarViewController implements Initializable {
   }
 
   @FXML
-  private void pressButtonPreviousMonth(ActionEvent event) {
+  private void pressButtonPreviousMonth(ActionEvent event) throws DALException {
+     attendance = student.getAttendance();
     GridCalendar.getChildren().clear();
     calendar.add(Calendar.MONTH, -1);
+    attendanceUnitToCalendarList();
     setMonthlyCalendar(calendar);
   }
 
   @FXML
-  private void pressButtonNextMonth(ActionEvent event) {
+  private void pressButtonNextMonth(ActionEvent event) throws DALException {
+     attendance = student.getAttendance();
     GridCalendar.getChildren().clear();
     calendar.add(Calendar.MONTH, 1);
+    attendanceUnitToCalendarList();
     setMonthlyCalendar(calendar);
   }
 
@@ -100,6 +107,7 @@ public class CalendarViewController implements Initializable {
   }
 
   private void attendanceUnitToCalendarList() {
+      dateList.clear();
   for (Date date : attendance) {
        dateList.add(date);
       }
@@ -108,10 +116,10 @@ public class CalendarViewController implements Initializable {
   private void setMonthlyCalendar(Calendar calendar) {
     int x;
     int y = 0;
-    double redButtons = 0;
-    double greenButtons = 0;
+    redButtons = 0;
+    greenButtons = 0;
 
-    Calendar cal = (Calendar) calendar.clone();
+    cal = (Calendar) calendar.clone();
 
     cal.set(Calendar.DAY_OF_MONTH, 1);
     int daysInTheMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -132,7 +140,6 @@ public class CalendarViewController implements Initializable {
 
       if (checkDateList(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH),
           cal.get(Calendar.YEAR))) {
-
         addButton(x, y, i, "Green");
         greenButtons++;
         map.put(i, datePass(cal));
@@ -152,17 +159,34 @@ public class CalendarViewController implements Initializable {
       cal.add(Calendar.DAY_OF_MONTH, 1);
       x++;
     }
-    labelDate.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US) + "/" + cal
-        .get(Calendar.YEAR) + " <" + (int) ((greenButtons / (greenButtons + redButtons)) * 100)
-        + "%>");
-    labelDate.setAlignment(Pos.TOP_RIGHT);
+    setMonthAttendanceLabel(this.cal,greenButtons,redButtons);
+  }
+
+  public void setMonthAttendanceLabel(Calendar cal, double greenButtons, double redButtons){
+      if(redButtons>0 && greenButtons>0) {
+          labelDate.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US) + "/" + cal
+                  .get(Calendar.YEAR) + " <" + (int) ((greenButtons / (greenButtons+redButtons)) * 100)
+                  + "%>");
+          labelDate.setAlignment(Pos.TOP_RIGHT);
+      }
+      else if(redButtons==0 && greenButtons>0){
+          labelDate.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US) + "/" + cal
+                  .get(Calendar.YEAR) + " <" +100+ "%>");
+          labelDate.setAlignment(Pos.TOP_RIGHT);
+      }
+      else if(redButtons>0 && greenButtons==0 || redButtons==0 && greenButtons==0){
+          labelDate.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US) + "/" + cal
+                  .get(Calendar.YEAR) + " <" +0+ "%>");
+          labelDate.setAlignment(Pos.TOP_RIGHT);
+      }
+
   }
 
   private java.sql.Date datePass(Calendar cal) {
     return new java.sql.Date(cal.getTimeInMillis());
   }
 
-  private void addButton(int x, int y, int i, String color) {
+  private void addButton(int x, int y, int i, String color)  {
     JFXButton butt = new JFXButton();
     buttonColor =
         "-fx-background-color:" + color + "; -fx-font-size: 13px; -fx-background-radius: 0";
@@ -177,15 +201,27 @@ public class CalendarViewController implements Initializable {
             ButtonType.NO);
         a.showAndWait();
         if (a.getResult() == ButtonType.YES) {
-          if (color.equals("Green")) {
+            if (color.equals("Green")) {
             GridCalendar.getChildren().remove(butt);
             addButton(x, y, i, "Red");
             manager.changeAttendance(student.getId(), map.get(i), "Delete attendance");
+            greenButtons--;
+            redButtons++;
+                setMonthAttendanceLabel(this.cal,greenButtons,redButtons);
           } else if (color.equals("Red")) {
             GridCalendar.getChildren().remove(butt);
             addButton(x, y, i, "Green");
             manager.changeAttendance(student.getId(), map.get(i), "Change attendance");
+                greenButtons++;
+                redButtons--;
+                setMonthAttendanceLabel(this.cal,greenButtons,redButtons);
           }
+            try {
+                student.getAttendanceAfterChanges();
+
+            } catch (DALException e1) {
+                e1.printStackTrace();
+            }
         }
       }
     });

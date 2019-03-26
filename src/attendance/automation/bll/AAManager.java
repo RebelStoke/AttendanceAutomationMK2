@@ -107,7 +107,8 @@ public class AAManager {
 public List<Date> loadStudentContent(String userName, List<Date> listOfAttendance) throws DALException {
     return sd.loadStudentContent(userName,listOfAttendance);
 }
-  public List<Student> loadClassContent(String className) throws DALException, IOException{
+
+  public List<Student> loadClassContent(String className) throws IOException, DALException {
     return cd.loadClassContent(className);
   }
 

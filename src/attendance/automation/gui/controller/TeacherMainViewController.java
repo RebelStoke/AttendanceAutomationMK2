@@ -151,8 +151,10 @@ public class TeacherMainViewController implements Initializable {
 
   @FXML
   private void selectStudent(MouseEvent event) throws IOException {
-    Person selectedStudentCalendar = tableView.getSelectionModel().getSelectedItem().getValue();
-    loadCalendar(selectedStudentCalendar);
+    if(tableView.getSelectionModel().getSelectedItem()!=null) {
+      Person selectedStudentCalendar = tableView.getSelectionModel().getSelectedItem().getValue();
+      loadCalendar(selectedStudentCalendar);
+    }
   }
 
   private void loadCalendar(Person student) throws IOException {

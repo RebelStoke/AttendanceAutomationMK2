@@ -6,37 +6,37 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="668.0" prefWidth="534.0" styleClass="MainAnchorPane" stylesheets="@../../css/attendance.automation.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="attendance.automation.gui.controller.StudentMainViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="702.0" prefWidth="534.0" styleClass="MainAnchorPane" stylesheets="@../../css/attendance.automation.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="attendance.automation.gui.controller.StudentMainViewController">
     <children>
       <Label fx:id="welcomeLabel" alignment="CENTER" layoutX="85.0" layoutY="42.0" prefHeight="39.0" prefWidth="375.0" text="Welcome, JanToth">
          <font>
             <Font size="27.0" />
          </font>
       </Label>
-      <Label fx:id="attendanceRate" alignment="CENTER" layoutX="153.0" layoutY="286.0" prefHeight="31.0" prefWidth="228.0" text="Total attendance" textAlignment="CENTER" underline="true">
+      <Label fx:id="attendanceRate" alignment="CENTER" layoutX="152.0" layoutY="232.0" prefHeight="31.0" prefWidth="228.0" text="Total attendance" textAlignment="CENTER" underline="true">
          <font>
             <Font name="System Bold" size="17.0" />
          </font></Label>
-      <JFXButton fx:id="btnLogin" layoutX="166.0" layoutY="155.0" onAction="#attendanceButton" prefHeight="97.0" prefWidth="200.0" ripplerFill="BLACK" style="-fx-border-color: grey;" styleClass="hooverOnLoginView" text="Mark attendance">
+      <JFXButton fx:id="btnLogin" layoutX="173.0" layoutY="98.0" onAction="#attendanceButton" prefHeight="97.0" prefWidth="200.0" ripplerFill="BLACK" style="-fx-border-color: grey;" styleClass="hooverOnLoginView" text="Mark attendance">
          <font>
             <Font name="System Italic" size="21.0" />
          </font>
       </JFXButton>
-      <Label fx:id="attendanceLabel" alignment="CENTER" layoutX="123.0" layoutY="265.0" prefHeight="21.0" prefWidth="287.0" textFill="RED" />
+      <Label fx:id="attendanceLabel" alignment="CENTER" layoutX="130.0" layoutY="202.0" prefHeight="21.0" prefWidth="287.0" textFill="RED" />
       <JFXButton fx:id="btnExit" buttonType="RAISED" layoutX="499.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#closeButton" prefHeight="21.0" prefWidth="21.0" ripplerFill="WHITE" styleClass="closeButton" text=" " />
       <JFXButton fx:id="btnMinimize" buttonType="RAISED" layoutX="472.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#minimizeButton" prefHeight="21.0" prefWidth="21.0" ripplerFill="WHITE" styleClass="minimiseButton" text=" " />
-      <StackPane layoutX="40.0" layoutY="323.0" prefHeight="327.0" prefWidth="454.0">
+      <AnchorPane fx:id="paneCalendar" layoutX="39.0" layoutY="263.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="454.0" styleClass="Calendar" AnchorPane.bottomAnchor="89.0">
          <children>
-            <JFXButton onAction="#outLog" styleClass="hooverOnLoginView" text="Log out" StackPane.alignment="BOTTOM_RIGHT" />
-            <AnchorPane fx:id="paneCalendar" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="290.0" prefWidth="454.0" styleClass="Calendar" StackPane.alignment="TOP_CENTER">
-               <children>
-                  <Label alignment="CENTER" layoutX="127.0" layoutY="120.0" prefHeight="50.0" prefWidth="200.0" text="CALENDAR">
-                     <font>
-                        <Font size="34.0" />
-                     </font>
-                  </Label>
-               </children>
-            </AnchorPane>
+            <Label alignment="CENTER" layoutX="127.0" layoutY="120.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="200.0" text="CALENDAR">
+               <font>
+                  <Font size="34.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <StackPane layoutX="40.0" layoutY="618.0" prefHeight="31.0" prefWidth="454.0">
+         <children>
+            <JFXButton onAction="#logOut" styleClass="hooverOnLoginView" text="Log out" StackPane.alignment="BOTTOM_RIGHT" />
          </children>
       </StackPane>
     </children>

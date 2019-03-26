@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="448.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="448.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@/attendance/automation/css/calendar.css" />
     </stylesheets>
@@ -17,12 +17,12 @@
       <GridPane layoutX="14.0" layoutY="57.0" prefHeight="42.0" prefWidth="423.0">
         <children>
             <Label text="Mo" />
-            <Label GridPane.columnIndex="1" text="Tu" />
-            <Label GridPane.columnIndex="2" text="We" />
-            <Label GridPane.columnIndex="3" text="Th" />
-            <Label GridPane.columnIndex="4" text="Fr" />
-            <Label GridPane.columnIndex="5" text="Sa" />
-            <Label GridPane.columnIndex="6" text="Su" />
+            <Label text="Tu" GridPane.columnIndex="1" />
+            <Label text="We" GridPane.columnIndex="2" />
+            <Label text="Th" GridPane.columnIndex="3" />
+            <Label text="Fr" GridPane.columnIndex="4" />
+            <Label text="Sa" GridPane.columnIndex="5" />
+            <Label text="Su" GridPane.columnIndex="6" />
          </children>
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -37,7 +37,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
-      <GridPane layoutX="14.0" layoutY="103.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="296.0" prefWidth="423.0" fx:id="GridCalendar">
+      <GridPane fx:id="GridCalendar" layoutX="14.0" layoutY="103.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="296.0" prefWidth="423.0">
         <columnConstraints>
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

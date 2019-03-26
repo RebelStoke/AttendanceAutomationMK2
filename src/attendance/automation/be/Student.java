@@ -39,7 +39,13 @@ public class Student extends RecursiveTreeObject<Student> implements Person {
     setAttendanceOfStudent();
   }
 
-  public List<Date> getAttendance() {
+  public List<Date> getAttendance(){
+    return listOfAttendance;
+  }
+
+  public List<Date> getAttendanceAfterChanges() throws DALException {
+    listOfAttendance.clear();
+    listOfAttendance.addAll(manager.loadStudentContent(this.name,this.listOfAttendance));
     return listOfAttendance;
   }
 
