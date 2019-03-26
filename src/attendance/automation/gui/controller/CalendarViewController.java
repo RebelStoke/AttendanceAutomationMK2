@@ -163,23 +163,10 @@ public class CalendarViewController implements Initializable {
   }
 
   public void setMonthAttendanceLabel(Calendar cal, double greenButtons, double redButtons){
-      if(redButtons>0 && greenButtons>0) {
           labelDate.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US) + "/" + cal
                   .get(Calendar.YEAR) + " <" + (int) ((greenButtons / (greenButtons+redButtons)) * 100)
                   + "%>");
           labelDate.setAlignment(Pos.TOP_RIGHT);
-      }
-      else if(redButtons==0 && greenButtons>0){
-          labelDate.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US) + "/" + cal
-                  .get(Calendar.YEAR) + " <" +100+ "%>");
-          labelDate.setAlignment(Pos.TOP_RIGHT);
-      }
-      else if(redButtons>0 && greenButtons==0 || redButtons==0 && greenButtons==0){
-          labelDate.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US) + "/" + cal
-                  .get(Calendar.YEAR) + " <" +0+ "%>");
-          labelDate.setAlignment(Pos.TOP_RIGHT);
-      }
-
   }
 
   private java.sql.Date datePass(Calendar cal) {
