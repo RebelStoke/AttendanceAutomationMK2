@@ -39,6 +39,13 @@ nbdist/
 .nb-gradle/
 
 # End of https://www.gitignore.io/api/java,netbeans
-*.properties
-*.html
-build/built-jar.properties
+.idea/dataSources.local.xml
+.idea/dataSources/dc5c19ee-c3bd-44fb-9e00-ee8b6b5cdc6f.xml
+.idea/dataSources/dc5c19ee-c3bd-44fb-9e00-ee8b6b5cdc6f/storage_v2/_src_/database/AttendanceAutomationB_20.WyRCWQ.meta
+.idea/dataSources/dc5c19ee-c3bd-44fb-9e00-ee8b6b5cdc6f/storage_v2/_src_/database/AttendanceAutomationB_20.WyRCWQ/schema/dbo.sYMBAA.meta
+.idea/workspace.xml
+out/production/AttendanceAutomationMK2/attendance/automation/css/
+out/production/AttendanceAutomationMK2/attendance/automation/dal/credentials.txt
+out/production/AttendanceAutomationMK2/attendance/automation/gui/images/
+out/production/AttendanceAutomationMK2/attendance/automation/gui/view/
+test/

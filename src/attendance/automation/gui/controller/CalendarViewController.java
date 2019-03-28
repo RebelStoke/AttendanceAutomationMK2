@@ -85,7 +85,6 @@ public class CalendarViewController implements Initializable {
 
   @FXML
   private void pressButtonPreviousMonth(ActionEvent event) throws DALException {
-     attendance = student.getAttendance();
     GridCalendar.getChildren().clear();
     calendar.add(Calendar.MONTH, -1);
     attendanceUnitToCalendarList();
@@ -94,7 +93,6 @@ public class CalendarViewController implements Initializable {
 
   @FXML
   private void pressButtonNextMonth(ActionEvent event) throws DALException {
-     attendance = student.getAttendance();
     GridCalendar.getChildren().clear();
     calendar.add(Calendar.MONTH, 1);
     attendanceUnitToCalendarList();

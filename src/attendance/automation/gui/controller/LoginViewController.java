@@ -16,9 +16,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
-
-import com.sun.corba.se.impl.logging.POASystemException;
 import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,11 +29,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import javax.swing.JOptionPane;
 
 /**
  * FXML Controller class
@@ -87,12 +85,10 @@ public class LoginViewController implements Initializable {
 
 
   @FXML
-  private void loginMethod(ActionEvent event)
-          throws IOException, BackingStoreException, DALException {
-      String login = loginField.getText();
-      String password = passwordField.getText();
-      login(login, password);
-
+  private void loginMethod(ActionEvent event) {
+    String login = loginField.getText();
+    String password = passwordField.getText();
+    login(login, password);
 
 
   }
@@ -108,32 +104,37 @@ public class LoginViewController implements Initializable {
 
   }
 
-  private void login(String login, String password) throws DALException, IOException, BackingStoreException {
-    if (manager.checkLogin(login, password)) {
-      manager.setUser();
-
-      if (rememberUsernameCheckBox.isSelected()) {
-        preferences.put("loginField", login);
-        preferences.put("passwordField", password);
-      } else {
-        preferences.clear();
+  private void login(String login, String password) {
+    Thread t = new Thread(() -> {
+      try {
+        if (manager.checkLogin(login, password)) {
+          manager.setUser();
+          Platform.runLater(() -> {
+            try{
+            if (manager.isTeacher()) {
+                teacherMainViewInitialization();
+            } else {
+                studentMainViewInitialization();
+              }
+            }
+            catch (IOException ex){
+              System.out.println("Problem");
+            }
+          });
+        } else {
+          loginField.clear();
+          passwordField.clear();
+          loginField.setPromptText("Wrong login/password");
+          loginField.setAlignment(Pos.BASELINE_LEFT);
+          loginField.setStyle("-fx-prompt-text-fill: red; -fx-prompt-font: 10px");
+        }
+      } catch (DALException | IOException ex) {
+        System.out.println("Error throw");
+        Platform
+            .runLater(() -> JOptionPane.showMessageDialog(null, "My Goodness, this is so concise"));
       }
-
-      if (!manager.isTeacher()) {
-        studentMainViewInitialization();
-      } else {
-        teacherMainViewInitialization();
-      }
-
-      Stage stage = (Stage) loginField.getScene().getWindow();
-      stage.close();
-    } else {
-      loginField.clear();
-      passwordField.clear();
-      loginField.setPromptText("Wrong login/password");
-      loginField.setAlignment(Pos.BASELINE_LEFT);
-      loginField.setStyle("-fx-prompt-text-fill: red; -fx-prompt-font: 10px");
-    }
+    });
+    t.start();
   }
 
   private void studentMainViewInitialization() throws IOException {
@@ -191,7 +192,6 @@ public class LoginViewController implements Initializable {
     loginField.setAlignment(Pos.CENTER);
     loginField.setStyle("-fx-prompt-text-fill: grey;");
   }
-
 
 
 }

@@ -5,12 +5,16 @@
  */
 package attendance.automation.dal;
 
-import attendance.automation.be.*;
+import attendance.automation.be.Person;
+import attendance.automation.be.Student;
+import attendance.automation.be.Teacher;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javafx.application.Platform;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -19,15 +23,17 @@ import java.sql.Statement;
 public class UserDAO {
 
   private final ConnectionProvider cp;
-   private Person person;
+  private Person person;
+  private Connection con;
 
 
   public UserDAO() throws IOException {
     cp = new ConnectionProvider();
   }
 
-  public boolean checkLogin(String login, String password) throws DALException, IOException {
-    try (Connection con = cp.getConnection()) {
+  public boolean checkLogin(String login, String password) throws DALException {
+    try {
+      con = cp.getConnection();
       Statement statement = con.createStatement();
       ResultSet rs = statement.executeQuery("SELECT * FROM Teacher");
       while (rs.next()) {
@@ -40,24 +46,25 @@ public class UserDAO {
           }
         }
       }
-      rs = statement.executeQuery("SELECT * FROM Student");
-      while (rs.next()) {
-        String name = rs.getString("UserName");
-        int id = rs.getInt("ID");
-        int classNum = rs.getInt("ClassNum");
-        if (login.equals(name)) {
-          if (password.equals(rs.getString("UserPassword"))) {
-            person = new Student(name, classNum, id);
-            return true;
+      if (person == null) {
+        rs = statement.executeQuery("SELECT * FROM Student");
+        while (rs.next()) {
+          String name = rs.getString("UserName");
+          int id = rs.getInt("ID");
+          int classNum = rs.getInt("ClassNum");
+          if (login.equals(name)) {
+            if (password.equals(rs.getString("UserPassword"))) {
+              person = new Student(name, classNum, id);
+              return true;
+            }
           }
         }
       }
-      return false;
-    } catch (SQLException ex) {
+    } catch (DALException | SQLException | IOException ex) {
       throw new DALException(ex);
     }
+    return false;
   }
-
   public Person getPerson() {
     return person;
   }
@@ -75,9 +82,6 @@ public class UserDAO {
       person = new Student(name, classNum, id);
     }
   }
-
-
-
 
 
 }

@@ -1,6 +1,8 @@
 
 package attendance.automation.dal;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author leopo
@@ -15,7 +17,6 @@ public class DALException extends Exception
     
     public DALException(Exception ex)
     {
-
         super(ex.getMessage());
     }
     

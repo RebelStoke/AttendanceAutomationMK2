@@ -9,11 +9,11 @@ import attendance.automation.bll.AAManager;
 import attendance.automation.dal.ConnectionProvider;
 import attendance.automation.dal.DALException;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Date;
+import java.util.List;
+
 /**
  * @author Revy
  */
@@ -35,23 +35,23 @@ public class Student extends RecursiveTreeObject<Student> implements Person {
     cp = new ConnectionProvider();
     listOfAttendance = new ArrayList<>();
     manager = AAManager.getInstance();
-    loadStudentContent(name,listOfAttendance);
+    loadStudentContent(name, listOfAttendance);
     setAttendanceOfStudent();
   }
 
-  public List<Date> getAttendance(){
+  public List<Date> getAttendance() {
     return listOfAttendance;
   }
 
   public List<Date> getAttendanceAfterChanges() throws DALException {
     listOfAttendance.clear();
-    listOfAttendance.addAll(manager.loadStudentContent(this.name,this.listOfAttendance));
+    listOfAttendance.addAll(manager.loadStudentContent(this.name, this.listOfAttendance));
     return listOfAttendance;
   }
 
-private void loadStudentContent(String name, List<Date> listOfAttendance) throws DALException {
- listOfAttendance.addAll(manager.loadStudentContent(name,listOfAttendance));
-}
+  private void loadStudentContent(String name, List<Date> listOfAttendance) throws DALException {
+    listOfAttendance.addAll(manager.loadStudentContent(name, listOfAttendance));
+  }
 
 
   private void setAttendanceOfStudent() throws DALException {
