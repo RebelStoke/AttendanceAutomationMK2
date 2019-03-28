@@ -9,6 +9,7 @@ import attendance.automation.WindowOpener;
 import attendance.automation.bll.AAManager;
 import attendance.automation.dal.DALException;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXSpinner;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -41,6 +42,7 @@ import javax.swing.JOptionPane;
  */
 public class LoginViewController implements Initializable {
 
+  public JFXSpinner spinner;
   @FXML
   private TextField loginField;
   @FXML
@@ -105,20 +107,18 @@ public class LoginViewController implements Initializable {
   }
 
   private void login(String login, String password) {
+    btnLogin.setVisible(false);
+    btnLogin.setDisable(true);
+    spinner.setVisible(true);
     Thread t = new Thread(() -> {
       try {
         if (manager.checkLogin(login, password)) {
           manager.setUser();
           Platform.runLater(() -> {
-            try{
-            if (manager.isTeacher()) {
-                teacherMainViewInitialization();
-            } else {
-                studentMainViewInitialization();
-              }
-            }
-            catch (IOException ex){
-              System.out.println("Problem");
+            try {
+              openUserView();
+            } catch (IOException e) {
+              e.printStackTrace();
             }
           });
         } else {
@@ -126,12 +126,16 @@ public class LoginViewController implements Initializable {
           passwordField.clear();
           loginField.setPromptText("Wrong login/password");
           loginField.setAlignment(Pos.BASELINE_LEFT);
-          loginField.setStyle("-fx-prompt-text-fill: red; -fx-prompt-font: 10px");
+          loginField.setStyle("-fx-prompt-text-fill: red");
+          Thread.sleep(1000);
+          spinner.setVisible(false);
+          btnLogin.setVisible(true);
+          btnLogin.setDisable(false);
         }
-      } catch (DALException | IOException ex) {
+      } catch (DALException | IOException | InterruptedException ex) {
         System.out.println("Error throw");
         Platform
-            .runLater(() -> JOptionPane.showMessageDialog(null, "My Goodness, this is so concise"));
+            .runLater(this::connectionUnsuccessful);
       }
     });
     t.start();
@@ -155,7 +159,6 @@ public class LoginViewController implements Initializable {
         getClass().getResource("/attendance/automation/gui/view/ForgotPasswordView.fxml"));
     new WindowOpener(fxmlLoader);
     Stage stage = (Stage) loginField.getScene().getWindow();
-    //stage.initStyle(StageStyle.UNDECORATED);
     stage.close();
   }
 
@@ -191,6 +194,22 @@ public class LoginViewController implements Initializable {
     loginField.setPromptText("Login/Email");
     loginField.setAlignment(Pos.CENTER);
     loginField.setStyle("-fx-prompt-text-fill: grey;");
+  }
+
+  private void openUserView() throws IOException {
+    if (manager.isTeacher()) {
+      teacherMainViewInitialization();
+    } else {
+      studentMainViewInitialization();
+    }
+    Stage stage = (Stage) loginField.getScene().getWindow();
+    stage.close();
+  }
+
+  private void connectionUnsuccessful(){
+    JOptionPane.showMessageDialog(null, "My Goodness, this is so concise");
+    spinner.setOpacity(0);
+    btnLogin.setOpacity(1);
   }
 
 
