@@ -7,8 +7,8 @@ package attendance.automation.gui.controller;
 
 import attendance.automation.be.Person;
 import attendance.automation.be.Student;
-import attendance.automation.bll.AAManager;
 import attendance.automation.dal.DALException;
+import attendance.automation.gui.model.AAModel;
 import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.net.URL;
@@ -46,7 +46,8 @@ public class CalendarViewController implements Initializable {
   private GridPane GridCalendar;
   @FXML
   private Label labelDate;
-  private AAManager manager;
+  //private AAManager manager;
+  private AAModel aamodel;
   private Date date = new Date();
   private Calendar calendar;
   private Calendar today;
@@ -70,7 +71,9 @@ public class CalendarViewController implements Initializable {
   @Override
   public void initialize(URL url, ResourceBundle rb) {
     try {
-        manager = new AAManager();
+
+      //manager = new AAManager();
+      aamodel = new AAModel();
       calendar = Calendar.getInstance();
       today = (Calendar) calendar.clone();
       firstDay = (Calendar) calendar.clone();
@@ -189,14 +192,16 @@ public class CalendarViewController implements Initializable {
             if (color.equals("Green")) {
             GridCalendar.getChildren().remove(butt);
             addButton(x, y, i, "Red");
-            manager.changeAttendance(student.getId(), map.get(i), "Delete attendance");
+           // manager.changeAttendance(student.getId(), map.get(i), "Delete attendance");
+              aamodel.changeAttendance(student.getId(), map.get(i), "Delete attendance");
             greenButtons--;
             redButtons++;
                 setMonthAttendanceLabel(this.cal,greenButtons,redButtons);
           } else if (color.equals("Red")) {
             GridCalendar.getChildren().remove(butt);
             addButton(x, y, i, "Green");
-            manager.changeAttendance(student.getId(), map.get(i), "Change attendance");
+            //manager.changeAttendance(student.getId(), map.get(i), "Change attendance");
+              aamodel.changeAttendance(student.getId(), map.get(i), "Change attendance");
                 greenButtons++;
                 redButtons--;
                 setMonthAttendanceLabel(this.cal,greenButtons,redButtons);

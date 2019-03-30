@@ -50,6 +50,7 @@ public class UserDAO {
         rs = statement.executeQuery("SELECT * FROM Student");
         while (rs.next()) {
           String name = rs.getString("UserName");
+          System.out.println(name);
           int id = rs.getInt("ID");
           int classNum = rs.getInt("ClassNum");
           if (login.equals(name)) {

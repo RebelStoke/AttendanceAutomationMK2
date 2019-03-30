@@ -10,7 +10,7 @@ import attendance.automation.be.Class;
 import attendance.automation.be.Person;
 import attendance.automation.be.Student;
 import attendance.automation.be.Teacher;
-import attendance.automation.bll.AAManager;
+import attendance.automation.gui.model.AAModel;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
@@ -58,7 +58,8 @@ public class TeacherMainViewController implements Initializable {
   @FXML
   private JFXTreeTableView<Student> tableView;
   private Teacher te;
-  private AAManager manager;
+ // private AAManager manager;
+  private AAModel aamodel;
   private List<Class> listOfClasses;
   private ObservableList<Class> observableClasses;
   @FXML
@@ -75,9 +76,9 @@ public class TeacherMainViewController implements Initializable {
   public void initialize(URL url, ResourceBundle rb) {
 
     try {
-      manager = AAManager.getInstance();
+      aamodel = AAModel.getInstance();
 
-      te = (Teacher) manager.getPerson();
+      te = (Teacher) aamodel.getPerson();
       welcomeLabel.setText("Welcome, " + te.getName() + "!");
       listOfClasses = te.getClassesList();
       observableClasses = FXCollections.observableArrayList(listOfClasses);
@@ -102,13 +103,12 @@ public class TeacherMainViewController implements Initializable {
 
   private void setTableView() {
     JFXTreeTableColumn<Student, String> studentName = new JFXTreeTableColumn<>("Student");
-    JFXTreeTableColumn<Student, String> studentAttendance = new JFXTreeTableColumn<>("Attendance");
-
+    JFXTreeTableColumn<Student, String> studentAbsence = new JFXTreeTableColumn<>("Absence");
     studentName.setCellValueFactory(new TreeItemPropertyValueFactory<>("name"));
-    studentAttendance
-        .setCellValueFactory(new TreeItemPropertyValueFactory<>("attendanceOfStudent"));
+    studentAbsence
+        .setCellValueFactory(new TreeItemPropertyValueFactory<>("absenceOfStudent"));
 
-    tableView.getColumns().addAll(studentName, studentAttendance);
+    tableView.getColumns().addAll(studentName, studentAbsence);
     studentSearch.textProperty().addListener((o, oldVal, newVal) -> {
       tableView.setPredicate(student ->
           String.valueOf(student.getValue().getName()).toLowerCase().contains(newVal.toLowerCase())

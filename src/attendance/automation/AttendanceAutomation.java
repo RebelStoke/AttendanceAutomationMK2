@@ -5,6 +5,8 @@
  */
 package attendance.automation;
 
+import attendance.automation.dal.DALException;
+import attendance.automation.gui.model.AAModel;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +15,8 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.io.IOException;
 
 /**
  *
@@ -50,8 +54,10 @@ public class AttendanceAutomation extends Application {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws DALException, IOException {
         launch(args);
+        AAModel aamodel = new AAModel();
+        System.out.println(aamodel.checkLogin("JanToth","1234"));
     }
     
 }

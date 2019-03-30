@@ -6,8 +6,8 @@
 package attendance.automation.gui.controller;
 
 import attendance.automation.WindowOpener;
-import attendance.automation.bll.AAManager;
 import attendance.automation.dal.DALException;
+import attendance.automation.gui.model.AAModel;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSpinner;
 import java.io.IOException;
@@ -29,7 +29,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -47,7 +47,8 @@ public class LoginViewController implements Initializable {
   private TextField loginField;
   @FXML
   private TextField passwordField;
-  private AAManager manager;
+  //private AAManager manager;
+  private AAModel aamodel;
   private Label loginFailed;
   private Preferences preferences;
   private WindowOpener opener;
@@ -67,9 +68,10 @@ public class LoginViewController implements Initializable {
   @Override
   public void initialize(URL url, ResourceBundle rb) {
     preferences = Preferences.userNodeForPackage(LoginViewController.class);
-    rememberPassword();
     try {
-      manager = AAManager.getInstance();
+     // manager = AAManager.getInstance();
+      aamodel= AAModel.getInstance();
+      setRemeberedPassword();
     } catch (IOException ex) {
       Logger.getLogger(LoginViewController.class.getName()).log(Level.SEVERE, null, ex);
     }
@@ -94,48 +96,67 @@ public class LoginViewController implements Initializable {
 
 
   }
-
-  private void rememberPassword() {
-
-    if (preferences.get("loginField", null) != null) {
+  private void setRemeberedPassword() {
+    if (preferences.get("loginField", null) != null && preferences.get("passwordField", null) != null) {
       loginField.setText(preferences.get("loginField", null));
       passwordField.setText(preferences.get("passwordField", null));
       rememberUsernameCheckBox.setSelected(true);
     }
+  }
+
+  private void rememberPassword() throws BackingStoreException {
+    if(rememberUsernameCheckBox.isSelected()) {
+      preferences.put("loginField", loginField.getText());
+      preferences.put("passwordField", passwordField.getText());
+    }else preferences.clear();
 
 
   }
+
+
+
+
+
 
   private void login(String login, String password) {
     btnLogin.setVisible(false);
     btnLogin.setDisable(true);
     spinner.setVisible(true);
     Thread t = new Thread(() -> {
+
       try {
-        if (manager.checkLogin(login, password)) {
-          manager.setUser();
+        System.out.println(login);
+        System.out.println(password);
+           if (aamodel.checkLogin(login, password)) {
+             aamodel.setUser();
           Platform.runLater(() -> {
             try {
               openUserView();
-            } catch (IOException e) {
+              rememberPassword();
+            } catch (IOException | BackingStoreException e) {
               e.printStackTrace();
             }
           });
         } else {
-          loginField.clear();
-          passwordField.clear();
+          Platform.runLater(() -> {
+            loginField.clear();
+            passwordField.clear();
+          });
           loginField.setPromptText("Wrong login/password");
           loginField.setAlignment(Pos.BASELINE_LEFT);
           loginField.setStyle("-fx-prompt-text-fill: red");
-          Thread.sleep(1000);
           spinner.setVisible(false);
           btnLogin.setVisible(true);
           btnLogin.setDisable(false);
+          Thread.sleep(1000);
+
         }
-      } catch (DALException | IOException | InterruptedException ex) {
-        System.out.println("Error throw");
-        Platform
-            .runLater(this::connectionUnsuccessful);
+      } catch (DALException | InterruptedException ex) {
+          System.out.println("Error throw");
+          //Platform.runLater(this::connectionUnsuccessful);
+          spinner.setVisible(false);
+          btnLogin.setVisible(true);
+          btnLogin.setDisable(false);
       }
     });
     t.start();
@@ -183,21 +204,17 @@ public class LoginViewController implements Initializable {
     exitFade.play();
   }
 
-
   @FXML
   private void minimizeButton(ActionEvent event) {
     Stage stage = (Stage) loginField.getScene().getWindow();
     stage.setIconified(true);
   }
 
-  public void clearPromptText(KeyEvent keyEvent) {
-    loginField.setPromptText("Login/Email");
-    loginField.setAlignment(Pos.CENTER);
-    loginField.setStyle("-fx-prompt-text-fill: grey;");
-  }
+
 
   private void openUserView() throws IOException {
-    if (manager.isTeacher()) {
+    System.out.println(aamodel.isTeacher());
+     if (aamodel.isTeacher()) {
       teacherMainViewInitialization();
     } else {
       studentMainViewInitialization();
@@ -212,5 +229,11 @@ public class LoginViewController implements Initializable {
     btnLogin.setOpacity(1);
   }
 
+
+  public void defaultPromptText(MouseEvent mouseEvent) {
+    loginField.setPromptText("Login/Email");
+    loginField.setAlignment(Pos.CENTER);
+    loginField.setStyle("-fx-prompt-text-fill: grey;");
+  }
 
 }

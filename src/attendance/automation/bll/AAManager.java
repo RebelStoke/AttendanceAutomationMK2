@@ -5,24 +5,22 @@
  */
 package attendance.automation.bll;
 
-import attendance.automation.be.Class;
 import attendance.automation.be.Person;
 import attendance.automation.be.Student;
 import attendance.automation.be.Teacher;
+import attendance.automation.be.Class;
 import attendance.automation.dal.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Revy
  */
-public class AAManager {
+public class AAManager implements AAFacadeManager {
 
   private static AAManager manager;
   private UserDAO ud;
@@ -48,36 +46,37 @@ public class AAManager {
       return manager;
     }
   }
-
-  public boolean checkLogin(String login, String password) throws DALException, IOException {
+ @Override
+  public boolean checkLogin(String login, String password) throws DALException {
     return ud.checkLogin(login, password);
   }
-
+  @Override
   public void setUser() {
     person = ud.getPerson();
   }
 
+  @Override
   public boolean isTeacher() {
     return person.getClass() == Teacher.class;
 
   }
 
-
+  @Override
   public void setStudent(int studentID) throws DALException, SQLException, IOException {
     ud.setStudent(studentID);
   }
 
-
+  @Override
   public Person getPerson() {
     return person;
   }
-
+  @Override
   public boolean markAttendance(int studentID) throws DALException {
     LocalDate localDate = LocalDate.now();
     Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     return dd.markAttendance(studentID, date);
   }
-
+  @Override
   public double attendanceRate(Student student) throws DALException {
     double schoolDays = 0;
     Calendar c1 = Calendar.getInstance();
@@ -94,22 +93,27 @@ public class AAManager {
     }
     return dd.getAttendancesForThisMonth(student.getId()) / schoolDays;
   }
-
+  @Override
   public void changeAttendance(int studentID, java.sql.Date date, String distinguisher) {
     dd.changeAttendance(studentID, date, distinguisher);
   }
 
-
+  @Override
   public List<Class> loadTeacherContent(String userName) throws DALException, IOException {
     return td.loadTeacherContent(userName);
   }
-
-public List<Date> loadStudentContent(String userName, List<Date> listOfAttendance) throws DALException {
+  @Override
+  public List<Date> loadStudentContent(String userName, List<Date> listOfAttendance) throws DALException {
     return sd.loadStudentContent(userName,listOfAttendance);
-}
-
+  }
+  @Override
   public List<Student> loadClassContent(String className) throws IOException, DALException {
     return cd.loadClassContent(className);
   }
+
+
+
+
+
 
 }
