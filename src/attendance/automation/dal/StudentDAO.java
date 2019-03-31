@@ -14,7 +14,6 @@ public class StudentDAO {
     private final ConnectionProvider cp;
 
 
-
     public StudentDAO() throws IOException {
         cp = new ConnectionProvider();
     }

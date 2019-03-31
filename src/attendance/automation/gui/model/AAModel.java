@@ -14,11 +14,11 @@ import java.util.List;
 
 public class AAModel {
 
-   public static AAModel model;
+    public static AAModel model;
     AAFacadeManager aaManager;
 
     public AAModel() throws IOException {
-      aaManager=new AAManager();
+        aaManager = new AAManager();
     }
 
     public static AAModel getInstance() throws IOException {
@@ -31,40 +31,48 @@ public class AAModel {
     }
 
     public boolean checkLogin(String login, String password) throws DALException {
-        return aaManager.checkLogin(login,password);
+        return aaManager.checkLogin(login, password);
     }
-    public void setUser(){
+
+    public void setUser() {
         aaManager.setUser();
     }
-    public boolean isTeacher(){
+
+    public boolean isTeacher() {
         return aaManager.isTeacher();
     }
+
     public void setStudent(int studentID) throws DALException, IOException, SQLException {
         aaManager.setStudent(studentID);
     }
-    public Person getPerson(){
+
+    public Person getPerson() {
         return aaManager.getPerson();
     }
+
     public boolean markAttendance(int studentID) throws DALException {
-        return  aaManager.markAttendance(studentID);
+        return aaManager.markAttendance(studentID);
     }
+
     public double attendanceRate(Student student) throws DALException {
         return aaManager.attendanceRate(student);
     }
-    public void changeAttendance(int studentID, java.sql.Date date, String distinguisher){
-        aaManager.changeAttendance(studentID,date,distinguisher);
+
+    public void changeAttendance(int studentID, java.sql.Date date, String distinguisher) {
+        aaManager.changeAttendance(studentID, date, distinguisher);
     }
+
     public List<Class> loadTeacherContent(String userName) throws IOException, DALException {
         return aaManager.loadTeacherContent(userName);
     }
-    public List<Date> loadStudentContent(String userName, List<Date> listOfAttendance){
-        return  loadStudentContent(userName,listOfAttendance);
-    }
-    public List<Student> loadClassContent(String className){
-        return  loadClassContent(className);
+
+    public List<Date> loadStudentContent(String userName, List<Date> listOfAttendance) {
+        return loadStudentContent(userName, listOfAttendance);
     }
 
-
+    public List<Student> loadClassContent(String className) {
+        return loadClassContent(className);
+    }
 
 
 }

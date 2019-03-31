@@ -32,6 +32,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -118,6 +119,8 @@ public class TeacherMainViewController implements Initializable {
 
   }
 
+
+
   private void loadDataToTable(ObservableList<Student> list) {
     TreeItem<Student> root;
     root = new RecursiveTreeItem<>(list, RecursiveTreeObject::getChildren);
@@ -159,8 +162,7 @@ public class TeacherMainViewController implements Initializable {
 
   private void loadCalendar(Person student) throws IOException {
     CalendarViewController calendarController = new CalendarViewController(null, student);
-    FXMLLoader loader = new FXMLLoader(
-        getClass().getResource("/attendance/automation/gui/view/CalendarView.fxml"));
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/attendance/automation/gui/view/CalendarView.fxml"));
     loader.setController(calendarController);
     Pane pane = loader.load();
     paneCalendar.getChildren().clear();

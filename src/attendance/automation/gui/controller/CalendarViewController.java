@@ -61,6 +61,8 @@ public class CalendarViewController implements Initializable {
   private double redButtons = 0;
   private double greenButtons = 0;
   private Calendar cal;
+  String green = "#65d355";
+  String red = "#e75757";
   CalendarViewController(StudentMainViewController studentController, Person student) {
     SMWC = studentController;
     this.student = (Student) student;
@@ -141,14 +143,14 @@ public class CalendarViewController implements Initializable {
 
       if (checkDateList(cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH),
           cal.get(Calendar.YEAR))) {
-        addButton(x, y, i, "Green");
+        addButton(x, y, i, green);
         greenButtons++;
         map.put(i, datePass(cal));
       } else if (cal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY
           && cal.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && cal.before(today) && cal
           .after(firstDay)) {
 
-        addButton(x, y, i, "Red");
+        addButton(x, y, i, red);
         redButtons++;
         map.put(i, datePass(cal));
       } else {
@@ -169,6 +171,7 @@ public class CalendarViewController implements Initializable {
                   + "%>");
           labelDate.setAlignment(Pos.TOP_RIGHT);
   }
+// #65d355 == green
 
   private java.sql.Date datePass(Calendar cal) {
     return new java.sql.Date(cal.getTimeInMillis());
@@ -189,17 +192,17 @@ public class CalendarViewController implements Initializable {
             ButtonType.NO);
         a.showAndWait();
         if (a.getResult() == ButtonType.YES) {
-            if (color.equals("Green")) {
+            if (color.equals(green)) {
             GridCalendar.getChildren().remove(butt);
-            addButton(x, y, i, "Red");
+            addButton(x, y, i, red);
            // manager.changeAttendance(student.getId(), map.get(i), "Delete attendance");
               aamodel.changeAttendance(student.getId(), map.get(i), "Delete attendance");
             greenButtons--;
             redButtons++;
                 setMonthAttendanceLabel(this.cal,greenButtons,redButtons);
-          } else if (color.equals("Red")) {
+          } else if (color.equals(red)) {
             GridCalendar.getChildren().remove(butt);
-            addButton(x, y, i, "Green");
+            addButton(x, y, i, green);
             //manager.changeAttendance(student.getId(), map.get(i), "Change attendance");
               aamodel.changeAttendance(student.getId(), map.get(i), "Change attendance");
                 greenButtons++;

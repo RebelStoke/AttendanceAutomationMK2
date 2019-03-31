@@ -84,5 +84,15 @@
             <JFXTextField fx:id="loginField" alignment="CENTER" maxWidth="200.0" minHeight="25.0" minWidth="120.0" onMouseClicked="#defaultPromptText" prefHeight="25.0" prefWidth="130.0" promptText="Login/Email" styleClass="credentials" unFocusColor="GREY" />
          </children>
       </StackPane>
+      <ImageView accessibleRole="BUTTON" fitHeight="25.0" fitWidth="21.0" layoutX="286.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true" styleClass="closeButton">
+         <image>
+            <Image url="@../../../../../../../Downloads/clos.png" />
+         </image>
+      </ImageView>
+      <ImageView accessibleRole="BUTTON" fitHeight="25.0" fitWidth="21.0" layoutX="260.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true" styleClass="minimiseButton">
+         <image>
+            <Image url="@../../../../../../../Downloads/mini.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
