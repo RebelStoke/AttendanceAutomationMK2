@@ -32,7 +32,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -110,13 +109,12 @@ public class TeacherMainViewController implements Initializable {
         .setCellValueFactory(new TreeItemPropertyValueFactory<>("absenceOfStudent"));
 
     tableView.getColumns().addAll(studentName, studentAbsence);
-    studentSearch.textProperty().addListener((o, oldVal, newVal) -> {
+      studentSearch.textProperty().addListener((o, oldVal, newVal) -> {
       tableView.setPredicate(student ->
           String.valueOf(student.getValue().getName()).toLowerCase().contains(newVal.toLowerCase())
               || student.getValue().getAttendanceOfStudent().contains(newVal)
       );
     });
-
   }
 
 

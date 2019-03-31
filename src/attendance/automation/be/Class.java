@@ -57,6 +57,7 @@ public class Class {
     }
 
     public List<Student> getStudentsList(){
+         listOfStudents.sort(Student::compareAbsence);
          return listOfStudents;
     }
     @Override
