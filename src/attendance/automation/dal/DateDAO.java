@@ -71,17 +71,16 @@ public class DateDAO {
 
     public double getAttendancesForThisMonth(int studentID) throws DALException {
         try {
-            double num = 0;
+            int num = 0;
             Connection con = cp.getConnection();
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
-            Date date = new Date();
+           // DateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
+           // Date date = new Date();
             String string = "Select * From StudentAttendance Where StudentID=" + studentID;
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(string);
             while (rs.next()) {
                 num++;
             }
-            System.out.println(num);
             return num;
         } catch (SQLException ex) {
             throw new DALException(ex);
@@ -91,16 +90,18 @@ public class DateDAO {
     public void changeAttendance(int studentID, java.sql.Date date, String distinguisher) {
         try {
             Connection con = cp.getConnection();
+            String sql = null;
+            PreparedStatement ppst;
             if ("Delete attendance".equals(distinguisher)) {
-                String sql = "DELETE FROM StudentAttendance WHERE date=? AND studentID=?";
-                PreparedStatement ppst = con.prepareStatement(sql);
+                sql = "DELETE FROM StudentAttendance WHERE date=? AND studentID=?";
+                ppst = con.prepareStatement(sql);
                 ppst.setDate(1, date);
                 ppst.setInt(2, studentID);
                 ppst.execute();
 
             } else if ("Change attendance".equals(distinguisher)) {
-                String sql = "INSERT INTO StudentAttendance VALUES(?,?)";
-                PreparedStatement ppst = con.prepareStatement(sql);
+                sql = "INSERT INTO StudentAttendance VALUES(?,?)";
+                ppst = con.prepareStatement(sql);
                 ppst.setDate(1, date);
                 ppst.setInt(2, studentID);
                 ppst.execute();

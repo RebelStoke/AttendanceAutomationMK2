@@ -8,7 +8,9 @@ package attendance.automation.be;
 import attendance.automation.bll.AAManager;
 import attendance.automation.dal.ConnectionProvider;
 import attendance.automation.dal.DALException;
+import attendance.automation.gui.model.AAModel;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,89 +21,93 @@ import java.util.List;
  */
 public class Student extends RecursiveTreeObject<Student> implements Person {
 
-  private String name;
-  private int classNum;
-  private int id;
-  private String className;
-  private List<Date> listOfAttendance;
-  private String attendanceOfStudent;
-  private String absenceOfStudent;
-  private AAManager manager;
-  private int absenceComp;
+    private String name;
+    private int classNum;
+    private int id;
+    private String className;
+    private List<Date> listOfAttendance;
+    private String attendanceOfStudent;
+    private String absenceOfStudent;
+    // private AAManager manager;
+    private AAModel aamodel;
+    private int absenceComp;
 
-  public Student(String name, int classNum, int id) throws IOException, DALException {
-    this.name = name;
-    this.classNum = classNum;
-    this.id = id;
-    listOfAttendance = new ArrayList<>();
-    manager = AAManager.getInstance();
-    loadStudentContent();
-    setAttendanceOfStudent();
-  }
+    public Student(String name, int classNum, int id) throws IOException, DALException {
+        this.name = name;
+        this.classNum = classNum;
+        this.id = id;
+        listOfAttendance = new ArrayList<>();
+        // manager = AAManager.getInstance();
+        aamodel = AAModel.getInstance();
+        loadStudentContent();
+        setAttendanceOfStudent();
+    }
 
-  public List<Date> getAttendance() {
-    return listOfAttendance;
-  }
-
-
-  public void loadStudentContent() throws DALException {
-    listOfAttendance.clear();
-    listOfAttendance.addAll(manager.loadStudentContent(this.name));
-  }
+    public List<Date> getAttendance() {
+        return listOfAttendance;
+    }
 
 
-  private void setAttendanceOfStudent() throws DALException {
-    int attendance=(int) (manager.attendanceRate(this) * 100);
-
-    attendanceOfStudent = attendance + "%";
-    absenceOfStudent =  100-attendance+ "%";
-    absenceComp = attendance;
-  }
-
-  public String getAttendanceOfStudent() {
-    return attendanceOfStudent;
-  }
-
-  public String getAbsenceOfStudent() {
-    return absenceOfStudent;
-  }
+    public void loadStudentContent() throws DALException {
+        listOfAttendance.clear();
+        listOfAttendance.addAll(aamodel.loadStudentContent(this.name));
+    }
 
 
-  public String getName() {
-    return name;
-  }
+    private void setAttendanceOfStudent() throws DALException {
+        int attendance = (int) (aamodel.attendanceRate(this) * 100);
 
-  public void setName(String name) {
-    this.name = name;
-  }
+        attendanceOfStudent = attendance + "%";
+        absenceOfStudent = 100 - attendance + "%";
+        absenceComp = attendance;
+    }
 
-  public int getId() {
-    return id;
-  }
+    public String getAttendanceOfStudent() {
+        return attendanceOfStudent;
+    }
 
-  public void setId(int id) {
-    this.id = id;
-  }
+    public String getAbsenceOfStudent() {
+        return absenceOfStudent;
+    }
 
-  public int getClassNum() {
-    return classNum;
-  }
 
-  public void setClassNum(int classNum) {
-    this.classNum = classNum;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public String getClassName() {
-    return className;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public void setClassName(String className) {
-    this.className = className;
-  }
+    public int getId() {
+        return id;
+    }
 
-  public int getAbsenceComp(){ return absenceComp; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-  public int compareAbsence(Student absent) {
-    return this.getAbsenceComp() - absent.getAbsenceComp();
-  }
+    public int getClassNum() {
+        return classNum;
+    }
+
+    public void setClassNum(int classNum) {
+        this.classNum = classNum;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public int getAbsenceComp() {
+        return absenceComp;
+    }
+
+    public int compareAbsence(Student absent) {
+        return this.getAbsenceComp() - absent.getAbsenceComp();
+    }
 }

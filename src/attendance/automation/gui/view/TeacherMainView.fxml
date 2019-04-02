@@ -19,26 +19,26 @@
             <Font size="28.0" />
          </font></Label>
       <JFXButton fx:id="btnMinimize" buttonType="RAISED" layoutX="818.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#minimizeButton" prefHeight="21.0" prefWidth="21.0" ripplerFill="WHITE" styleClass="minimiseButton" text=" " />
-      <ImageView fx:id="pic" fitHeight="93.0" fitWidth="200.0" layoutX="544.0" layoutY="82.0" opacity="0.89">
+      <ImageView fx:id="pic" fitHeight="93.0" fitWidth="200.0" layoutX="543.0" layoutY="50.0" opacity="0.89">
          <image>
             <Image url="@../images/easv-logo1.png" />
          </image>
       </ImageView>
       <JFXButton fx:id="btnExit" buttonType="RAISED" layoutX="847.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#exitButton" prefHeight="21.0" prefWidth="21.0" ripplerFill="WHITE" styleClass="closeButton" text=" " />
-      <StackPane layoutX="25.0" layoutY="143.0" prefHeight="47.0" prefWidth="356.0">
+      <StackPane layoutX="25.0" layoutY="116.0" prefHeight="47.0" prefWidth="356.0">
          <children>
             <JFXTextField fx:id="studentSearch" maxHeight="25.0" maxWidth="135.0" prefHeight="25.0" prefWidth="131.0" promptText="Search student" StackPane.alignment="CENTER_RIGHT" />
             <JFXComboBox fx:id="selectClass" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#comboBoxOnAction" prefHeight="21.0" prefWidth="121.0" promptText="Select class" StackPane.alignment="CENTER_LEFT" />
          </children>
       </StackPane>
-      <StackPane layoutX="26.0" layoutY="190.0" prefHeight="410.0" prefWidth="841.0">
+      <StackPane layoutX="26.0" layoutY="163.0" prefHeight="437.0" prefWidth="841.0">
          <children>
-            <JFXTreeTableView fx:id="tableView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#selectStudent" prefHeight="375.0" prefWidth="356.0" StackPane.alignment="TOP_LEFT">
+            <JFXTreeTableView fx:id="tableView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#selectStudent" prefHeight="405.0" prefWidth="356.0" StackPane.alignment="TOP_LEFT">
                <columnResizePolicy>
                   <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </JFXTreeTableView>
-            <AnchorPane fx:id="paneCalendar" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="375.0" prefWidth="448.0" styleClass="Calendar" StackPane.alignment="TOP_RIGHT">
+            <AnchorPane fx:id="paneCalendar" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="404.0" prefWidth="448.0" styleClass="Calendar" StackPane.alignment="TOP_RIGHT">
                <children>
                   <Label layoutX="128.0" layoutY="173.0" prefHeight="54.0" prefWidth="193.0" text="CALENDAR">
                      <font>

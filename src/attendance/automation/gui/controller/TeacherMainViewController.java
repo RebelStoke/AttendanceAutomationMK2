@@ -10,7 +10,7 @@ import attendance.automation.be.Class;
 import attendance.automation.be.Person;
 import attendance.automation.be.Student;
 import attendance.automation.be.Teacher;
-import attendance.automation.bll.AAManager;
+import attendance.automation.gui.model.AAModel;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
@@ -47,132 +47,133 @@ import javafx.util.Duration;
  */
 public class TeacherMainViewController implements Initializable {
 
-  @FXML
-  private Label welcomeLabel;
-  @FXML
-  private AnchorPane paneCalendar;
-  @FXML
-  private JFXComboBox<Class> selectClass;
-  @FXML
-  private JFXTextField studentSearch;
-  @FXML
-  private JFXTreeTableView<Student> tableView;
-  private Teacher te;
-  private AAManager manager;
-  private List<Class> listOfClasses;
-  private ObservableList<Class> observableClasses;
-  @FXML
-  private JFXButton btnExit;
-  @FXML
-  private JFXButton btnMinimize;
-  @FXML
-  private ImageView pic;
+    @FXML
+    private Label welcomeLabel;
+    @FXML
+    private AnchorPane paneCalendar;
+    @FXML
+    private JFXComboBox<Class> selectClass;
+    @FXML
+    private JFXTextField studentSearch;
+    @FXML
+    private JFXTreeTableView<Student> tableView;
+    private Teacher te;
+    //private AAManager manager;
+    private  AAModel aamodel;
+    private List<Class> listOfClasses;
+    private ObservableList<Class> observableClasses;
+    @FXML
+    private JFXButton btnExit;
+    @FXML
+    private JFXButton btnMinimize;
+    @FXML
+    private ImageView pic;
 
-  /**
-   * Initializes the controller class.
-   */
-  @Override
-  public void initialize(URL url, ResourceBundle rb) {
+    /**
+     * Initializes the controller class.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
 
-    try {
-      manager = AAManager.getInstance();
+        try {
+           // manager = AAManager.getInstance();
+            aamodel = AAModel.getInstance();
+            te = (Teacher) aamodel.getPerson();
+            welcomeLabel.setText("Welcome, " + te.getName() + "!");
+            listOfClasses = te.getClassesList();
+            observableClasses = FXCollections.observableArrayList(listOfClasses);
+            selectClass.setItems(observableClasses);
+            selectClass.setPromptText(observableClasses.get(0).getName());
+            setTableView();
+            loadDataToTable(
+                    FXCollections.observableArrayList(observableClasses.get(0).getStudentsList()));
 
-      te = (Teacher) manager.getPerson();
-      welcomeLabel.setText("Welcome, " + te.getName() + "!");
-      listOfClasses = te.getClassesList();
-      observableClasses = FXCollections.observableArrayList(listOfClasses);
-      selectClass.setItems(observableClasses);
-      selectClass.setPromptText(observableClasses.get(0).getName());
-      setTableView();
-      loadDataToTable(
-          FXCollections.observableArrayList(observableClasses.get(0).getStudentsList()));
+            Person toCalendar = observableClasses.get(0).getStudentsList().get(0);
 
-      Person toCalendar = observableClasses.get(0).getStudentsList().get(0);
+            loadCalendar(toCalendar);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-      loadCalendar(toCalendar);
-    } catch (IOException e) {
-      e.printStackTrace();
+        fadeIn(btnExit);
+        fadeIn(btnMinimize);
+        fadeIn(pic);
+
     }
 
-    fadeIn(btnExit);
-    fadeIn(btnMinimize);
-    fadeIn(pic);
+    private void setTableView() {
+        JFXTreeTableColumn<Student, String> studentName = new JFXTreeTableColumn<>("Student");
+        JFXTreeTableColumn<Student, String> studentAttendance = new JFXTreeTableColumn<>("Absence");
 
-  }
+        studentName.setCellValueFactory(new TreeItemPropertyValueFactory<>("name"));
+        studentAttendance
+                .setCellValueFactory(new TreeItemPropertyValueFactory<>("absenceOfStudent"));
 
-  private void setTableView() {
-    JFXTreeTableColumn<Student, String> studentName = new JFXTreeTableColumn<>("Student");
-    JFXTreeTableColumn<Student, String> studentAttendance = new JFXTreeTableColumn<>("Attendance");
+        tableView.getColumns().addAll(studentName, studentAttendance);
+        studentSearch.textProperty().addListener((o, oldVal, newVal) -> {
+            tableView.setPredicate(student ->
+                    String.valueOf(student.getValue().getName()).toLowerCase().contains(newVal.toLowerCase())
+                            || student.getValue().getAttendanceOfStudent().contains(newVal)
+            );
+        });
 
-    studentName.setCellValueFactory(new TreeItemPropertyValueFactory<>("name"));
-    studentAttendance
-        .setCellValueFactory(new TreeItemPropertyValueFactory<>("attendanceOfStudent"));
-
-    tableView.getColumns().addAll(studentName, studentAttendance);
-    studentSearch.textProperty().addListener((o, oldVal, newVal) -> {
-      tableView.setPredicate(student ->
-          String.valueOf(student.getValue().getName()).toLowerCase().contains(newVal.toLowerCase())
-              || student.getValue().getAttendanceOfStudent().contains(newVal)
-      );
-    });
-
-  }
-
-  private void loadDataToTable(ObservableList<Student> list) {
-    TreeItem<Student> root;
-    root = new RecursiveTreeItem<>(list, RecursiveTreeObject::getChildren);
-    tableView.setRoot(root);
-    tableView.setShowRoot(false);
-  }
-
-  @FXML
-  private void comboBoxOnAction(ActionEvent event) {
-    loadDataToTable(FXCollections
-        .observableArrayList(selectClass.getSelectionModel().getSelectedItem().getStudentsList()));
-  }
-
-  @FXML
-  private void exitButton(ActionEvent event) {
-    System.exit(0);
-  }
-
-  @FXML
-  private void minimizeButton(ActionEvent event) {
-    Stage stage = (Stage) welcomeLabel.getScene().getWindow();
-    stage.setIconified(true);
-  }
-
-  private void fadeIn(Node node) {
-    FadeTransition exitFade = new FadeTransition(Duration.seconds(2), node);
-    exitFade.setFromValue(0);
-    exitFade.setToValue(1);
-    exitFade.play();
-  }
-
-  @FXML
-  private void selectStudent(MouseEvent event) throws IOException {
-    if(tableView.getSelectionModel().getSelectedItem()!=null) {
-      Person selectedStudentCalendar = tableView.getSelectionModel().getSelectedItem().getValue();
-      loadCalendar(selectedStudentCalendar);
     }
-  }
 
-  private void loadCalendar(Person student) throws IOException {
-    CalendarViewController calendarController = new CalendarViewController(student);
-    FXMLLoader loader = new FXMLLoader(
-        getClass().getResource("/attendance/automation/gui/view/CalendarView.fxml"));
-    loader.setController(calendarController);
-    Pane pane = loader.load();
-    paneCalendar.getChildren().clear();
-    paneCalendar.getChildren().add(pane);
-  }
+    private void loadDataToTable(ObservableList<Student> list) {
+        TreeItem<Student> root;
+        root = new RecursiveTreeItem<>(list, RecursiveTreeObject::getChildren);
+        tableView.setRoot(root);
+        tableView.setShowRoot(false);
+    }
+
+    @FXML
+    private void comboBoxOnAction(ActionEvent event) {
+        loadDataToTable(FXCollections
+                .observableArrayList(selectClass.getSelectionModel().getSelectedItem().getStudentsList()));
+    }
+
+    @FXML
+    private void exitButton(ActionEvent event) {
+        System.exit(0);
+    }
+
+    @FXML
+    private void minimizeButton(ActionEvent event) {
+        Stage stage = (Stage) welcomeLabel.getScene().getWindow();
+        stage.setIconified(true);
+    }
+
+    private void fadeIn(Node node) {
+        FadeTransition exitFade = new FadeTransition(Duration.seconds(2), node);
+        exitFade.setFromValue(0);
+        exitFade.setToValue(1);
+        exitFade.play();
+    }
+
+    @FXML
+    private void selectStudent(MouseEvent event) throws IOException {
+        if(tableView.getSelectionModel().getSelectedItem()!=null) {
+            Person selectedStudentCalendar = tableView.getSelectionModel().getSelectedItem().getValue();
+            loadCalendar(selectedStudentCalendar);
+        }
+    }
+
+    private void loadCalendar(Person student) throws IOException {
+        CalendarViewController calendarController = new CalendarViewController(student);
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/attendance/automation/gui/view/CalendarView.fxml"));
+        loader.setController(calendarController);
+        Pane pane = loader.load();
+        paneCalendar.getChildren().clear();
+        paneCalendar.getChildren().add(pane);
+    }
 
 
-  public void logOut(ActionEvent event) throws IOException {
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("/attendance/automation/gui/view/LoginView.fxml"));
-    WindowOpener opener = new WindowOpener(loader);
-    Stage stage = (Stage) welcomeLabel.getScene().getWindow();
-    stage.close();
-  }
+    public void logOut(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/attendance/automation/gui/view/LoginView.fxml"));
+        WindowOpener opener = new WindowOpener(loader);
+        Stage stage = (Stage) welcomeLabel.getScene().getWindow();
+        stage.close();
+    }
 
 }

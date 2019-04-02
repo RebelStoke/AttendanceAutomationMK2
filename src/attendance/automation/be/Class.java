@@ -7,6 +7,7 @@ package attendance.automation.be;
 
 import attendance.automation.bll.AAManager;
 import attendance.automation.dal.DALException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,49 +17,50 @@ import java.util.List;
  */
 public class Class {
 
-  private final List<Student> listOfStudents;
-  private String name;
-  private int id;
-  private AAManager manager;
+    private final List<Student> listOfStudents;
+    private String name;
+    private int id;
+    private AAManager manager;
 
-  public Class(String name, int id) throws IOException, DALException {
-    this.name = name;
-    this.id = id;
-    listOfStudents = new ArrayList<>();
-    manager = AAManager.getInstance();
-    loadClassContent(name);
-  }
+    public Class(String name, int id) throws IOException, DALException {
+        this.name = name;
+        this.id = id;
+        listOfStudents = new ArrayList<>();
+        manager = AAManager.getInstance();
+        loadClassContent(name);
+    }
 
-  private void loadClassContent(String name) throws DALException, IOException {
-    listOfStudents.addAll(manager.loadClassContent(name));
-  }
+    private void loadClassContent(String name) throws DALException, IOException {
+        listOfStudents.addAll(manager.loadClassContent(name));
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public int getId() {
-    return id;
-  }
+    public int getId() {
+        return id;
+    }
 
-  public void setId(int id) {
-    this.id = id;
-  }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-  public List<Student> getStudentsList() {
-    return listOfStudents;
-  }
+    public List<Student> getStudentsList() {
+        listOfStudents.sort(Student::compareAbsence);
+        return listOfStudents;
+    }
 
-  public void setStudentsList(List<Student> list) {
-    listOfStudents.addAll(list);
-  }
+    public void setStudentsList(List<Student> list) {
+        listOfStudents.addAll(list);
+    }
 
-  @Override
-  public String toString() {
-    return name;
-  }
+    @Override
+    public String toString() {
+        return name;
+    }
 }

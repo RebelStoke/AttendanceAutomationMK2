@@ -8,6 +8,7 @@ package attendance.automation;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * @author Revy
@@ -15,17 +16,21 @@ import javafx.stage.Stage;
 public class AttendanceAutomation extends Application {
 
 
-  /**
-   * @param args the command line arguments
-   */
-  public static void main(String[] args) {
-    launch(args);
-  }
+    @Override
+    public void start(Stage stage) throws Exception {
+        stage.initStyle(StageStyle.UNDECORATED);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("gui/view/LoginView.fxml"));
+        WindowOpener opener = new WindowOpener(loader);
+        stage.setMinWidth(324);
+        stage.setMinHeight(400);
 
-  @Override
-  public void start(Stage stage) throws Exception {
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("gui/view/LoginView.fxml"));
-    new WindowOpener(loader);
-  }
+    }
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
 
 }

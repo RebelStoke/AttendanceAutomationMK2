@@ -2,10 +2,7 @@ package attendance.automation.dal;
 
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +15,7 @@ public class StudentDAO {
     public StudentDAO() throws IOException {
         cp = new ConnectionProvider();
     }
+
 
     public List<Date> loadStudentContent(String userName) throws DALException {
         List<Date> listOfAttendance = new ArrayList<>();
@@ -37,6 +35,8 @@ public class StudentDAO {
         }
         return listOfAttendance;
     }
+
+
 
 
 }
