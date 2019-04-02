@@ -7,8 +7,8 @@ package attendance.automation.gui.controller;
 
 import attendance.automation.WindowOpener;
 import attendance.automation.be.Student;
-import attendance.automation.bll.AAManager;
 import attendance.automation.dal.DALException;
+import attendance.automation.gui.model.AAModel;
 import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.net.URL;
@@ -36,7 +36,8 @@ public class StudentMainViewController implements Initializable {
 
   @FXML
   private Label welcomeLabel;
-  private AAManager manager;
+ // private AAManager manager;
+  private AAModel aamodel;
   private Student st;
   private Label dateLabel;
   @FXML
@@ -56,8 +57,10 @@ public class StudentMainViewController implements Initializable {
   public void initialize(URL url, ResourceBundle rb) {
 
     try {
-      manager = AAManager.getInstance();
-      st = (Student) manager.getPerson();
+     // manager = AAManager.getInstance();
+     // st = (Student) manager.getPerson();
+      aamodel = AAModel.getInstance();
+      st = (Student) aamodel.getPerson();
       welcomeLabel.setText("Welcome " + st.getName());
 
       if (st.getAttendance().size() > 0) {
@@ -92,17 +95,18 @@ public class StudentMainViewController implements Initializable {
   }
 
   private void calculateAttendanceRate() throws DALException {
-    String string = "Total attendance " + (int) (manager.attendanceRate(st) * 100) + "%";
+    //String string = "Total attendance " + (int) (manager.attendanceRate(st) * 100) + "%";
+    String string = "Total attendance " + (int) (aamodel.attendanceRate(st) * 100) + "%";
     attendanceRate.setText(string);
   }
 
   private void checkAttendance() throws DALException, SQLException, IOException {
-    if (manager.markAttendance(st.getId())) {
+    if (aamodel.markAttendance(st.getId())) {
       attendanceLabel.setText("Attendance marked successfully!");
       calculateAttendanceRate();
-      manager.setStudent(st.getId());
-      manager.setUser();
-      st = (Student) manager.getPerson();
+      aamodel.setStudent(st.getId());
+      aamodel.setUser();
+      st = (Student) aamodel.getPerson();
       loadCalendar();
     } else {
       attendanceLabel.setText("Attendance already marked!");

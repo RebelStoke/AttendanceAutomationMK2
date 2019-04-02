@@ -17,7 +17,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 /**
- *
  * @author Revy
  */
 public class DateDAO {
@@ -98,7 +97,7 @@ public class DateDAO {
                 ppst.setDate(1, date);
                 ppst.setInt(2, studentID);
                 ppst.execute();
-                
+
             } else if ("Change attendance".equals(distinguisher)) {
                 String sql = "INSERT INTO StudentAttendance VALUES(?,?)";
                 PreparedStatement ppst = con.prepareStatement(sql);

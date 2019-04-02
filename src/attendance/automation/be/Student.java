@@ -25,7 +25,9 @@ public class Student extends RecursiveTreeObject<Student> implements Person {
   private String className;
   private List<Date> listOfAttendance;
   private String attendanceOfStudent;
+  private String absenceOfStudent;
   private AAManager manager;
+  private int absenceComp;
 
   public Student(String name, int classNum, int id) throws IOException, DALException {
     this.name = name;
@@ -49,12 +51,19 @@ public class Student extends RecursiveTreeObject<Student> implements Person {
 
 
   private void setAttendanceOfStudent() throws DALException {
-    attendanceOfStudent = (int) (manager.attendanceRate(this) * 100) + "%";
+    int attendance=(int) (manager.attendanceRate(this) * 100);
 
+    attendanceOfStudent = attendance + "%";
+    absenceOfStudent =  100-attendance+ "%";
+    absenceComp = attendance;
   }
 
   public String getAttendanceOfStudent() {
     return attendanceOfStudent;
+  }
+
+  public String getAbsenceOfStudent() {
+    return absenceOfStudent;
   }
 
 
@@ -88,5 +97,11 @@ public class Student extends RecursiveTreeObject<Student> implements Person {
 
   public void setClassName(String className) {
     this.className = className;
+  }
+
+  public int getAbsenceComp(){ return absenceComp; }
+
+  public int compareAbsence(Student absent) {
+    return this.getAbsenceComp() - absent.getAbsenceComp();
   }
 }

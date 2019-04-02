@@ -16,9 +16,9 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" minHeight="352.0" minWidth="324.0" prefHeight="352.0" prefWidth="324.0" styleClass="MainAnchorPane" stylesheets="@../../css/attendance.automation.css" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="attendance.automation.gui.controller.LoginViewController" fx:id="loginWindow">
+<AnchorPane fx:id="loginWindow" minHeight="352.0" minWidth="324.0" prefHeight="352.0" prefWidth="324.0" styleClass="MainAnchorPane" stylesheets="@../../css/attendance.automation.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="attendance.automation.gui.controller.LoginViewController">
    <children>
-      <JFXSpinner layoutX="75.0" layoutY="195.0" prefHeight="50.0" prefWidth="175.0" visible="false" fx:id="spinner" />
+      <JFXSpinner fx:id="spinner" layoutX="75.0" layoutY="195.0" prefHeight="50.0" prefWidth="175.0" visible="false" />
       <Label layoutX="45.0" layoutY="60.0" />
       <Label layoutX="35.0" layoutY="110.0" />
       <StackPane layoutX="-1.0" layoutY="302.0" maxHeight="10000.0" maxWidth="10000.0" prefHeight="50.0" prefWidth="324.0" AnchorPane.bottomAnchor="-3.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="302.0">
@@ -56,7 +56,7 @@
             <JFXCheckBox id="rememberMe" fx:id="rememberUsernameCheckBox" checkedColor="#569cff" text="Remember me" />
          </children>
       </StackPane>
-      <StackPane AnchorPane.bottomAnchor="112.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="193.0" layoutX="3.0" layoutY="193.0" prefHeight="50.0" prefWidth="321.0">
+      <StackPane layoutX="3.0" layoutY="193.0" prefHeight="50.0" prefWidth="321.0" AnchorPane.bottomAnchor="112.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="193.0">
          <children>
             <JFXButton id="logInButton" fx:id="btnLogin" buttonType="RAISED" minHeight="37.0" minWidth="126.0" onAction="#loginMethod" opacity="0.91" ripplerFill="#3e1cb9" text="Log in" textAlignment="CENTER" textOverrun="LEADING_WORD_ELLIPSIS">
                <font>
@@ -79,10 +79,20 @@
             </ImageView>
          </children>
       </StackPane>
-      <StackPane layoutX="102.0" layoutY="119.0" minHeight="37.0" minWidth="126.0" onKeyPressed="#clearPromptText" prefHeight="37.0" prefWidth="126.0" AnchorPane.bottomAnchor="193.0" AnchorPane.leftAnchor="99.0" AnchorPane.rightAnchor="99.0" AnchorPane.topAnchor="119.0">
+      <StackPane layoutX="102.0" layoutY="119.0" minHeight="37.0" minWidth="126.0" prefHeight="37.0" prefWidth="126.0" AnchorPane.bottomAnchor="193.0" AnchorPane.leftAnchor="99.0" AnchorPane.rightAnchor="99.0" AnchorPane.topAnchor="119.0">
          <children>
-            <JFXTextField fx:id="loginField" alignment="CENTER" maxWidth="200.0" minHeight="25.0" minWidth="120.0" onKeyTyped="#clearPromptText" prefHeight="25.0" prefWidth="130.0" promptText="Login/Email" styleClass="credentials" unFocusColor="GREY" />
+            <JFXTextField fx:id="loginField" alignment="CENTER" maxWidth="200.0" minHeight="25.0" minWidth="120.0" onMouseClicked="#defaultPromptText" prefHeight="25.0" prefWidth="130.0" promptText="Login/Email" styleClass="credentials" unFocusColor="GREY" />
          </children>
       </StackPane>
+      <ImageView accessibleRole="BUTTON" fitHeight="25.0" fitWidth="21.0" layoutX="286.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true" styleClass="closeButton">
+         <image>
+            <Image url="@../../../../../../../Downloads/clos.png" />
+         </image>
+      </ImageView>
+      <ImageView accessibleRole="BUTTON" fitHeight="25.0" fitWidth="21.0" layoutX="260.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true" styleClass="minimiseButton">
+         <image>
+            <Image url="@../../../../../../../Downloads/mini.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

@@ -24,6 +24,7 @@ public class DALException extends Exception
     public String getMessage()
     {
 
+
         return super.getMessage();
     }
 }
