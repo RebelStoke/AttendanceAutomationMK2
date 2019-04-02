@@ -23,7 +23,6 @@ public class Student extends RecursiveTreeObject<Student> implements Person {
   private int classNum;
   private int id;
   private String className;
-  private ConnectionProvider cp;
   private List<Date> listOfAttendance;
   private String attendanceOfStudent;
   private AAManager manager;
@@ -32,10 +31,9 @@ public class Student extends RecursiveTreeObject<Student> implements Person {
     this.name = name;
     this.classNum = classNum;
     this.id = id;
-    cp = new ConnectionProvider();
     listOfAttendance = new ArrayList<>();
     manager = AAManager.getInstance();
-    loadStudentContent(name, listOfAttendance);
+    loadStudentContent();
     setAttendanceOfStudent();
   }
 
@@ -43,14 +41,10 @@ public class Student extends RecursiveTreeObject<Student> implements Person {
     return listOfAttendance;
   }
 
-  public List<Date> getAttendanceAfterChanges() throws DALException {
-    listOfAttendance.clear();
-    listOfAttendance.addAll(manager.loadStudentContent(this.name, this.listOfAttendance));
-    return listOfAttendance;
-  }
 
-  private void loadStudentContent(String name, List<Date> listOfAttendance) throws DALException {
-    listOfAttendance.addAll(manager.loadStudentContent(name, listOfAttendance));
+  public void loadStudentContent() throws DALException {
+    listOfAttendance.clear();
+    listOfAttendance.addAll(manager.loadStudentContent(this.name));
   }
 
 

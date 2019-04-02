@@ -158,7 +158,7 @@ public class TeacherMainViewController implements Initializable {
   }
 
   private void loadCalendar(Person student) throws IOException {
-    CalendarViewController calendarController = new CalendarViewController(null, student);
+    CalendarViewController calendarController = new CalendarViewController(student);
     FXMLLoader loader = new FXMLLoader(
         getClass().getResource("/attendance/automation/gui/view/CalendarView.fxml"));
     loader.setController(calendarController);

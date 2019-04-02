@@ -104,8 +104,8 @@ public class AAManager {
     return td.loadTeacherContent(userName);
   }
 
-public List<Date> loadStudentContent(String userName, List<Date> listOfAttendance) throws DALException {
-    return sd.loadStudentContent(userName,listOfAttendance);
+public List<Date> loadStudentContent(String userName) throws DALException {
+    return sd.loadStudentContent(userName);
 }
 
   public List<Student> loadClassContent(String className) throws IOException, DALException {

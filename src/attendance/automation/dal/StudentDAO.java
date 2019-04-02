@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +20,8 @@ public class StudentDAO {
         cp = new ConnectionProvider();
     }
 
-    public List<Date> loadStudentContent(String userName, List<Date> listOfAttendance) throws DALException {
+    public List<Date> loadStudentContent(String userName) throws DALException {
+        List<Date> listOfAttendance = new ArrayList<>();
         try {
             Connection con = cp.getConnection();
             Statement statement = con.createStatement();

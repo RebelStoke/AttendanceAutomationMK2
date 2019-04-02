@@ -26,11 +26,9 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javax.swing.JOptionPane;
@@ -43,14 +41,14 @@ import javax.swing.JOptionPane;
 public class LoginViewController implements Initializable {
 
   public JFXSpinner spinner;
+
+  private AAManager manager;
+  private Preferences preferences;
+
   @FXML
   private TextField loginField;
   @FXML
   private TextField passwordField;
-  private AAManager manager;
-  private Label loginFailed;
-  private Preferences preferences;
-  private WindowOpener opener;
   @FXML
   private ImageView pic;
   @FXML
@@ -58,11 +56,7 @@ public class LoginViewController implements Initializable {
   @FXML
   private JFXButton btnExit;
   @FXML
-  private AnchorPane loginWindow;
-  @FXML
   private CheckBox rememberUsernameCheckBox;
-  @FXML
-  private JFXButton btnMinimize;
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
@@ -133,7 +127,6 @@ public class LoginViewController implements Initializable {
           btnLogin.setDisable(false);
         }
       } catch (DALException | IOException | InterruptedException ex) {
-        System.out.println("Error throw");
         Platform
             .runLater(this::connectionUnsuccessful);
       }
@@ -163,15 +156,13 @@ public class LoginViewController implements Initializable {
   }
 
   @FXML
-  private void loginStudent(ActionEvent event)
-      throws DALException, IOException, BackingStoreException {
+  private void loginStudent(ActionEvent event) {
     loginField.setText("JanToth");
     passwordField.setText("1234");
   }
 
   @FXML
-  private void loginTeacher(ActionEvent event)
-      throws DALException, IOException, BackingStoreException {
+  private void loginTeacher(ActionEvent event) {
     loginField.setText("MarekStancik");
     passwordField.setText("cplusplus");
   }
@@ -206,7 +197,7 @@ public class LoginViewController implements Initializable {
     stage.close();
   }
 
-  private void connectionUnsuccessful(){
+  private void connectionUnsuccessful() {
     JOptionPane.showMessageDialog(null, "My Goodness, this is so concise");
     spinner.setOpacity(0);
     btnLogin.setOpacity(1);

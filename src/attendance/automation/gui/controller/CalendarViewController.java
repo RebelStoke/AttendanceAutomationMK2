@@ -40,37 +40,33 @@ import javafx.scene.layout.GridPane;
  */
 public class CalendarViewController implements Initializable {
 
-  private URL url;
-  private ResourceBundle rb;
+
   @FXML
   private GridPane GridCalendar;
   @FXML
   private Label labelDate;
+
   private AAManager manager;
-  private Date date = new Date();
   private Calendar calendar;
   private Calendar today;
   private Calendar firstDay;
   private List<Date> attendance = new ArrayList<>();
   private List<Date> dateList = new ArrayList<>();
   private String buttonColor;
-  private StudentMainViewController SMWC;
   private Student student;
-  private Map<Integer, java.sql.Date> map;
+  private Map<Integer, java.sql.Date> map = new HashMap<>();
   private double redButtons = 0;
   private double greenButtons = 0;
   private Calendar cal;
-  CalendarViewController(StudentMainViewController studentController, Person student) {
-    SMWC = studentController;
-    this.student = (Student) student;
-    map = new HashMap<>();
 
+  CalendarViewController(Person student) {
+    this.student = (Student) student;
   }
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
     try {
-        manager = new AAManager();
+      manager = new AAManager();
       calendar = Calendar.getInstance();
       today = (Calendar) calendar.clone();
       firstDay = (Calendar) calendar.clone();
@@ -105,10 +101,8 @@ public class CalendarViewController implements Initializable {
   }
 
   private void attendanceUnitToCalendarList() {
-      dateList.clear();
-  for (Date date : attendance) {
-       dateList.add(date);
-      }
+    dateList.clear();
+    dateList.addAll(attendance);
   }
 
   private void setMonthlyCalendar(Calendar calendar) {
@@ -157,21 +151,21 @@ public class CalendarViewController implements Initializable {
       cal.add(Calendar.DAY_OF_MONTH, 1);
       x++;
     }
-    setMonthAttendanceLabel(this.cal,greenButtons,redButtons);
+    setMonthAttendanceLabel(this.cal, greenButtons, redButtons);
   }
 
-  public void setMonthAttendanceLabel(Calendar cal, double greenButtons, double redButtons){
-          labelDate.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US) + "/" + cal
-                  .get(Calendar.YEAR) + " <" + (int) ((greenButtons / (greenButtons+redButtons)) * 100)
-                  + "%>");
-          labelDate.setAlignment(Pos.TOP_RIGHT);
+  private void setMonthAttendanceLabel(Calendar cal, double greenButtons, double redButtons) {
+    labelDate.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US) + "/" + cal
+        .get(Calendar.YEAR) + " <" + (int) ((greenButtons / (greenButtons + redButtons)) * 100)
+        + "%>");
+    labelDate.setAlignment(Pos.TOP_RIGHT);
   }
 
   private java.sql.Date datePass(Calendar cal) {
     return new java.sql.Date(cal.getTimeInMillis());
   }
 
-  private void addButton(int x, int y, int i, String color)  {
+  private void addButton(int x, int y, int i, String color) {
     JFXButton butt = new JFXButton();
     buttonColor =
         "-fx-background-color:" + color + "; -fx-font-size: 13px; -fx-background-radius: 0";
@@ -180,33 +174,33 @@ public class CalendarViewController implements Initializable {
     butt.setMinSize(36, 36);
     butt.setMaxSize(36, 36);
     butt.setOnAction(e -> {
-      if (SMWC == null && !color.equals("Grey")) {
+      if (manager.isTeacher() && !color.equals("Grey")) {
         Alert a = new Alert(Alert.AlertType.CONFIRMATION,
             "Do you want to change student attendance for this day?", ButtonType.YES,
             ButtonType.NO);
         a.showAndWait();
         if (a.getResult() == ButtonType.YES) {
-            if (color.equals("Green")) {
+          if (color.equals("Green")) {
             GridCalendar.getChildren().remove(butt);
             addButton(x, y, i, "Red");
             manager.changeAttendance(student.getId(), map.get(i), "Delete attendance");
             greenButtons--;
             redButtons++;
-                setMonthAttendanceLabel(this.cal,greenButtons,redButtons);
+            setMonthAttendanceLabel(this.cal, greenButtons, redButtons);
           } else if (color.equals("Red")) {
             GridCalendar.getChildren().remove(butt);
             addButton(x, y, i, "Green");
             manager.changeAttendance(student.getId(), map.get(i), "Change attendance");
-                greenButtons++;
-                redButtons--;
-                setMonthAttendanceLabel(this.cal,greenButtons,redButtons);
+            greenButtons++;
+            redButtons--;
+            setMonthAttendanceLabel(this.cal, greenButtons, redButtons);
           }
-            try {
-                student.getAttendanceAfterChanges();
+          try {
+            student.loadStudentContent();
 
-            } catch (DALException e1) {
-                e1.printStackTrace();
-            }
+          } catch (DALException e1) {
+            e1.printStackTrace();
+          }
         }
       }
     });
