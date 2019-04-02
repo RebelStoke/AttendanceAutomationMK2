@@ -96,7 +96,7 @@ public class StudentMainViewController implements Initializable {
 
   private void calculateAttendanceRate() throws DALException {
     //String string = "Total attendance " + (int) (manager.attendanceRate(st) * 100) + "%";
-    String string = "Total attendance " + (int) (aamodel.attendanceRate(st) * 100) + "%";
+    String string = "Total attendance " + (aamodel.attendanceRate(st) * 100) + "%";
     attendanceRate.setText(string);
   }
 
