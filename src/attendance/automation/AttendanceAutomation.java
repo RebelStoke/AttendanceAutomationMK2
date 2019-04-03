@@ -10,10 +10,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+
 /**
  * @author Revy
  */
-public class AttendanceAutomation extends Application {
+public class AttendanceAutomation extends Application{
 
 
     @Override
@@ -25,6 +29,7 @@ public class AttendanceAutomation extends Application {
         stage.setMinHeight(400);
 
     }
+
 
     /**
      * @param args the command line arguments

@@ -10,143 +10,132 @@ import attendance.automation.be.Student;
 import attendance.automation.dal.DALException;
 import attendance.automation.gui.model.AAModel;
 import com.jfoenix.controls.JFXButton;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.SQLException;
-import java.util.Calendar;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.Calendar;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Tothko
  */
 public class StudentMainViewController implements Initializable {
 
-  @FXML
-  private Label welcomeLabel;
- // private AAManager manager;
-  private AAModel aamodel;
-  private Student st;
-  private Label dateLabel;
-  @FXML
-  private Label attendanceLabel;
-  @FXML
-  private Label attendanceRate;
-  private Calendar mCalendar;
-  @FXML
-  private JFXButton btnExit;
-  @FXML
-  private JFXButton btnLogin;
-  @FXML
-  private AnchorPane paneCalendar;
+    @FXML
+    private Label welcomeLabel;
+    private AAModel aamodel;
+    private Student st;
+    @FXML
+    private Label attendanceLabel;
+    @FXML
+    private Label attendanceRate;
+    private Calendar mCalendar;
+    @FXML
+    private JFXButton btnExit;
+    @FXML
+    private JFXButton btnLogin;
+    @FXML
+    private AnchorPane paneCalendar;
+    private CalendarViewController calendarController;
+    private FXMLLoader loader;
+    private WindowOpener opener;
 
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
 
-  @Override
-  public void initialize(URL url, ResourceBundle rb) {
+        try {
+            aamodel = AAModel.getInstance();
+            st = (Student) aamodel.getPerson();
+            welcomeLabel.setText("Welcome " + st.getName());
 
-    try {
-     // manager = AAManager.getInstance();
-     // st = (Student) manager.getPerson();
-      aamodel = AAModel.getInstance();
-      st = (Student) aamodel.getPerson();
-      welcomeLabel.setText("Welcome " + st.getName());
+            if (st.getAttendance().size() > 0) {
+                calculateAttendanceRate();
+            }
 
-      if (st.getAttendance().size() > 0) {
-        calculateAttendanceRate();
-      }
+            fadeIn(btnExit);
+            fadeIn(btnLogin);
+            mCalendar = Calendar.getInstance();
+            loadCalendar();
+        } catch (DALException | IOException ex) {
+            Logger.getLogger(StudentMainViewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-      fadeIn(btnExit);
-      fadeIn(btnLogin);
-      mCalendar = Calendar.getInstance();
-      loadCalendar();
-    } catch (DALException | IOException ex) {
-      Logger.getLogger(StudentMainViewController.class.getName()).log(Level.SEVERE, null, ex);
     }
 
-  }
-
-  @FXML
-  private void closeButton(ActionEvent event) {
-    Stage stage = (Stage) welcomeLabel.getScene().getWindow();
-    stage.close();
-  }
-
-  @FXML
-  private void attendanceButton() throws DALException, SQLException, IOException {
-    if (mCalendar.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY
-        && mCalendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-      checkAttendance();
-    } else {
-      attendanceLabel.setText("Today is weekend!");
+    @FXML
+    private void closeButton() {
+        Stage stage = (Stage) welcomeLabel.getScene().getWindow();
+        stage.close();
     }
 
-  }
+    @FXML
+    private void attendanceButton() throws DALException, IOException {
+        if (mCalendar.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY
+                && mCalendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+            checkAttendance();
+        } else {
+            attendanceLabel.setText("Today is weekend!");
+        }
 
-  private void calculateAttendanceRate() throws DALException {
-    //String string = "Total attendance " + (int) (manager.attendanceRate(st) * 100) + "%";
-    String string = "Total attendance " + (int) (aamodel.attendanceRate(st) * 100) + "%";
-    attendanceRate.setText(string);
-  }
-
-  private void checkAttendance() throws DALException, SQLException, IOException {
-    if (aamodel.markAttendance(st.getId())) {
-      attendanceLabel.setText("Attendance marked successfully!");
-      calculateAttendanceRate();
-      aamodel.setStudent(st.getId());
-      aamodel.setUser();
-      st = (Student) aamodel.getPerson();
-      loadCalendar();
-    } else {
-      attendanceLabel.setText("Attendance already marked!");
     }
-  }
 
-  private void fadeIn(Node node) {
-    FadeTransition exitFade = new FadeTransition(Duration.seconds(2), node);
-    exitFade.setFromValue(0);
-    exitFade.setToValue(1);
-    exitFade.play();
-  }
+    private void calculateAttendanceRate() throws DALException {
+        String string = "Total attendance " + (int) (aamodel.attendanceRate(st) * 100) + "%";
+        attendanceRate.setText(string);
+    }
 
-  public Student getStudent() {
-    return st;
-  }
+    private void checkAttendance() throws DALException, IOException {
+        if (aamodel.markAttendance(st.getId())) {
+            attendanceLabel.setText("Attendance marked successfully!");
+            calculateAttendanceRate();
+            loadCalendar();
+        } else {
+            attendanceLabel.setText("Attendance already marked!");
+        }
+    }
 
-  private void loadCalendar() throws IOException {
-    CalendarViewController calendarController = new CalendarViewController(st);
-    FXMLLoader loader = new FXMLLoader(
-        getClass().getResource("/attendance/automation/gui/view/CalendarView.fxml"));
-    loader.setController(calendarController);
+    private void fadeIn(Node node) {
+        FadeTransition exitFade = new FadeTransition(Duration.seconds(2), node);
+        exitFade.setFromValue(0);
+        exitFade.setToValue(1);
+        exitFade.play();
+    }
 
-    Pane pane = loader.load();
+    public Student getStudent() {
+        return st;
+    }
 
-    paneCalendar.getChildren().clear();
-    paneCalendar.getChildren().add(pane);
-  }
+    private void loadCalendar() throws IOException {
+        calendarController = new CalendarViewController();
+        calendarController.setStudent(st);
+        loader = new FXMLLoader(getClass().getResource("/attendance/automation/gui/view/CalendarView.fxml"));
+        loader.setController(calendarController);
+        paneCalendar.getChildren().clear();
+        paneCalendar.getChildren().add(loader.load());
+    }
 
-  @FXML
-  private void minimizeButton(ActionEvent event) {
-    Stage stage = (Stage) welcomeLabel.getScene().getWindow();
-    stage.setIconified(true);
-  }
+    @FXML
+    private void minimizeButton() {
+        Stage stage = (Stage) welcomeLabel.getScene().getWindow();
+        stage.setIconified(true);
+    }
 
-  public void logOut(ActionEvent event) throws IOException {
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("/attendance/automation/gui/view/LoginView.fxml"));
-    WindowOpener opener = new WindowOpener(loader);
-    Stage stage = (Stage) welcomeLabel.getScene().getWindow();
-    stage.close();
-  }
+    public void logOut() throws IOException {
+        loader = new FXMLLoader(getClass().getResource("/attendance/automation/gui/view/LoginView.fxml"));
+        opener = new WindowOpener(loader);
+        Stage stage = (Stage) welcomeLabel.getScene().getWindow();
+        stage.close();
+    }
 
 }

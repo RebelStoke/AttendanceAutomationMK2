@@ -4,9 +4,9 @@ import attendance.automation.be.Class;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,14 +19,14 @@ public class TeacherDAO {
         cp = new ConnectionProvider();
     }
 
-
-    public List<Class> loadTeacherContent(String userName) throws DALException, IOException {
+    public List<Class> loadTeacherContent(int tID) throws DALException, IOException {
         List<Class> listOfClasses = new ArrayList<>();
         try {
             Connection con = cp.getConnection();
-            Statement statement = con.createStatement();
-            String str = "SELECT Class.ID, ClassName FROM Teacher, TeachersClass, Class WHERE Teacher.ID=TeachersClass.TeacherID AND TeachersClass.ClassID = Class.ID AND UserName='" + userName + "'";
-            ResultSet rs = statement.executeQuery(str);
+            String str = "SELECT Class.ID, ClassName FROM Teacher, TeachersClass, Class WHERE Teacher.ID=TeachersClass.TeacherID AND TeachersClass.ClassID = Class.ID AND TeacherID=?";
+            PreparedStatement ppst = con.prepareStatement(str);
+            ppst.setInt(1, tID);
+            ResultSet rs = ppst.executeQuery();
             while (rs.next()) {
                 String name1 = rs.getString("ClassName");
                 int number = rs.getInt("ID");
@@ -37,4 +37,5 @@ public class TeacherDAO {
         }
         return listOfClasses;
     }
+
 }

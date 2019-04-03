@@ -47,12 +47,16 @@ public class Student extends RecursiveTreeObject<Student> implements Person {
         return listOfAttendance;
     }
 
-
+    /*
+        public void loadStudentContent() throws DALException {
+            listOfAttendance.clear();
+            listOfAttendance.addAll(aamodel.loadStudentContent(this.name));
+        }
+    */
     public void loadStudentContent() throws DALException {
         listOfAttendance.clear();
-        listOfAttendance.addAll(aamodel.loadStudentContent(this.name));
+        listOfAttendance.addAll(aamodel.loadStudentContent(this.id));
     }
-
 
     private void setAttendanceOfStudent() throws DALException {
         int attendance = (int) (aamodel.attendanceRate(this) * 100);

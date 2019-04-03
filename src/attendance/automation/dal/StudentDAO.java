@@ -16,16 +16,15 @@ public class StudentDAO {
         cp = new ConnectionProvider();
     }
 
-
-    public List<Date> loadStudentContent(String userName) throws DALException {
+    public List<Date> loadStudentContent(int stuID) throws DALException {
         List<Date> listOfAttendance = new ArrayList<>();
         try {
             Connection con = cp.getConnection();
-            Statement statement = con.createStatement();
             String str =
-                    "SELECT * FROM Student, StudentAttendance WHERE Student.ID=StudentID AND UserName='"
-                            + userName + "' ORDER BY Date ASC";
-            ResultSet rs = statement.executeQuery(str);
+                    "SELECT StudentID,Date from StudentAttendance WHERE StudentID=?  ORDER BY Date ASC";
+            PreparedStatement ppst = con.prepareStatement(str);
+            ppst.setInt(1, stuID);
+            ResultSet rs = ppst.executeQuery();
             while (rs.next()) {
                 Date date = rs.getDate("Date");
                 listOfAttendance.add(date);
@@ -35,8 +34,6 @@ public class StudentDAO {
         }
         return listOfAttendance;
     }
-
-
 
 
 }

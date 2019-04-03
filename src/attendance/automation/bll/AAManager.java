@@ -64,11 +64,6 @@ public class AAManager implements AAFacadeManager {
     }
 
     @Override
-    public void setStudent(int studentID) throws DALException, SQLException, IOException {
-        ud.setStudent(studentID);
-    }
-
-    @Override
     public Person getPerson() {
         return person;
     }
@@ -104,13 +99,13 @@ public class AAManager implements AAFacadeManager {
     }
 
     @Override
-    public List<Class> loadTeacherContent(String userName) throws DALException, IOException {
-        return td.loadTeacherContent(userName);
+    public List<Class> loadTeacherContent(int teacherID) throws DALException, IOException {
+        return td.loadTeacherContent(teacherID);
     }
 
     @Override
-    public List<Date> loadStudentContent(String userName) throws DALException {
-        return sd.loadStudentContent(userName);
+    public List<Date> loadStudentContent(int studentID) throws DALException {
+        return sd.loadStudentContent(studentID);
     }
 
     @Override

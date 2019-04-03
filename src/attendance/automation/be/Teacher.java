@@ -8,6 +8,7 @@ package attendance.automation.be;
 import attendance.automation.bll.AAManager;
 import attendance.automation.dal.ConnectionProvider;
 import attendance.automation.dal.DALException;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -17,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author Revy
  */
 public class Teacher implements Person {
@@ -25,41 +25,40 @@ public class Teacher implements Person {
     private int id;
     private List<Class> listOfClasses;
     private AAManager manager;
-    public Teacher(String name, int id) throws IOException, DALException{
-        this.name=name;
-        this.id=id;
+
+    public Teacher(String name, int id) throws IOException, DALException {
+        this.name = name;
+        this.id = id;
         listOfClasses = new ArrayList<>();
         manager = AAManager.getInstance();
-        loadTeacherContent(name);
+        loadTeacherContent();
     }
 
-    public void loadTeacherContent(String userName) throws DALException, IOException{
-        listOfClasses.addAll(manager.loadTeacherContent(userName));
+    public void loadTeacherContent() throws DALException, IOException {
+        listOfClasses.addAll(manager.loadTeacherContent(this.id));
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
-    public int getId()
-    {
+
+    public int getId() {
         return id;
     }
 
-    public void setId(int id)
-    {
+    public void setId(int id) {
         this.id = id;
     }
-    
-    public void setClassesList(List<Class> list){
+
+    public void setClassesList(List<Class> list) {
         listOfClasses.addAll(list);
     }
-    public List<Class> getClassesList(){
-         return listOfClasses;
+
+    public List<Class> getClassesList() {
+        return listOfClasses;
     }
 }

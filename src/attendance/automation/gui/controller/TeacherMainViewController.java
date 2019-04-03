@@ -11,17 +11,8 @@ import attendance.automation.be.Person;
 import attendance.automation.be.Student;
 import attendance.automation.be.Teacher;
 import attendance.automation.gui.model.AAModel;
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXTreeTableColumn;
-import com.jfoenix.controls.JFXTreeTableView;
-import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import java.io.IOException;
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,11 +25,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * FXML Controller class
@@ -58,8 +52,7 @@ public class TeacherMainViewController implements Initializable {
     @FXML
     private JFXTreeTableView<Student> tableView;
     private Teacher te;
-    //private AAManager manager;
-    private  AAModel aamodel;
+    private AAModel aamodel;
     private List<Class> listOfClasses;
     private ObservableList<Class> observableClasses;
     @FXML
@@ -69,6 +62,9 @@ public class TeacherMainViewController implements Initializable {
     @FXML
     private ImageView pic;
 
+    private CalendarViewController calendarController;
+    private FXMLLoader loader;
+    private WindowOpener opener;
     /**
      * Initializes the controller class.
      */
@@ -76,7 +72,6 @@ public class TeacherMainViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         try {
-           // manager = AAManager.getInstance();
             aamodel = AAModel.getInstance();
             te = (Teacher) aamodel.getPerson();
             welcomeLabel.setText("Welcome, " + te.getName() + "!");
@@ -85,11 +80,8 @@ public class TeacherMainViewController implements Initializable {
             selectClass.setItems(observableClasses);
             selectClass.setPromptText(observableClasses.get(0).getName());
             setTableView();
-            loadDataToTable(
-                    FXCollections.observableArrayList(observableClasses.get(0).getStudentsList()));
-
+            loadDataToTable(FXCollections.observableArrayList(observableClasses.get(0).getStudentsList()));
             Person toCalendar = observableClasses.get(0).getStudentsList().get(0);
-
             loadCalendar(toCalendar);
         } catch (IOException e) {
             e.printStackTrace();
@@ -103,13 +95,12 @@ public class TeacherMainViewController implements Initializable {
 
     private void setTableView() {
         JFXTreeTableColumn<Student, String> studentName = new JFXTreeTableColumn<>("Student");
-        JFXTreeTableColumn<Student, String> studentAttendance = new JFXTreeTableColumn<>("Absence");
+        JFXTreeTableColumn<Student, String> studentAbsence = new JFXTreeTableColumn<>("Absence");
 
         studentName.setCellValueFactory(new TreeItemPropertyValueFactory<>("name"));
-        studentAttendance
-                .setCellValueFactory(new TreeItemPropertyValueFactory<>("absenceOfStudent"));
+        studentAbsence.setCellValueFactory(new TreeItemPropertyValueFactory<>("absenceOfStudent"));
 
-        tableView.getColumns().addAll(studentName, studentAttendance);
+        tableView.getColumns().addAll(studentName, studentAbsence);
         studentSearch.textProperty().addListener((o, oldVal, newVal) -> {
             tableView.setPredicate(student ->
                     String.valueOf(student.getValue().getName()).toLowerCase().contains(newVal.toLowerCase())
@@ -124,12 +115,12 @@ public class TeacherMainViewController implements Initializable {
         root = new RecursiveTreeItem<>(list, RecursiveTreeObject::getChildren);
         tableView.setRoot(root);
         tableView.setShowRoot(false);
+        tableView.getSelectionModel().select(0);
     }
 
     @FXML
-    private void comboBoxOnAction(ActionEvent event) {
-        loadDataToTable(FXCollections
-                .observableArrayList(selectClass.getSelectionModel().getSelectedItem().getStudentsList()));
+    private void comboBoxOnAction() {
+        loadDataToTable(FXCollections.observableArrayList(selectClass.getSelectionModel().getSelectedItem().getStudentsList()));
     }
 
     @FXML
@@ -151,27 +142,27 @@ public class TeacherMainViewController implements Initializable {
     }
 
     @FXML
-    private void selectStudent(MouseEvent event) throws IOException {
-        if(tableView.getSelectionModel().getSelectedItem()!=null) {
+    private void selectStudent() throws IOException {
+        if (tableView.getSelectionModel().getSelectedItem() != null) {
             Person selectedStudentCalendar = tableView.getSelectionModel().getSelectedItem().getValue();
             loadCalendar(selectedStudentCalendar);
         }
     }
 
     private void loadCalendar(Person student) throws IOException {
-        CalendarViewController calendarController = new CalendarViewController(student);
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/attendance/automation/gui/view/CalendarView.fxml"));
+        if(calendarController!=null)
+        calendarController = new CalendarViewController();
+        calendarController.setStudent(student);
+        loader = new FXMLLoader(getClass().getResource("/attendance/automation/gui/view/CalendarView.fxml"));
         loader.setController(calendarController);
-        Pane pane = loader.load();
         paneCalendar.getChildren().clear();
-        paneCalendar.getChildren().add(pane);
+        paneCalendar.getChildren().add(loader.load());
     }
 
 
-    public void logOut(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/attendance/automation/gui/view/LoginView.fxml"));
-        WindowOpener opener = new WindowOpener(loader);
+    public void logOut() throws IOException {
+        loader = new FXMLLoader(getClass().getResource("/attendance/automation/gui/view/LoginView.fxml"));
+        new WindowOpener(loader);
         Stage stage = (Stage) welcomeLabel.getScene().getWindow();
         stage.close();
     }

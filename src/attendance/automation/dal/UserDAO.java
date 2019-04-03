@@ -83,20 +83,6 @@ public class UserDAO {
         return person;
     }
 
-    public void setStudent(int studentID) throws DALException, SQLException, IOException {
-
-        Connection con = cp.getConnection();
-        Statement statement = con.createStatement();
-        ResultSet rs = statement.executeQuery("SELECT * FROM Student WHERE ID=" + studentID);
-
-        while (rs.next()) {
-            String name = rs.getString("UserName");
-            int id = rs.getInt("ID");
-            int classNum = rs.getInt("ClassNum");
-            person = new Student(name, classNum, id);
-        }
-    }
-
 
 }
 
