@@ -67,7 +67,7 @@
       </StackPane>
       <StackPane layoutX="102.0" layoutY="159.0" minHeight="37.0" minWidth="126.0" prefHeight="37.0" prefWidth="126.0" AnchorPane.bottomAnchor="156.0" AnchorPane.leftAnchor="99.0" AnchorPane.rightAnchor="99.0" AnchorPane.topAnchor="156.0">
          <children>
-            <JFXPasswordField fx:id="passwordField" alignment="CENTER" maxWidth="200.0" minHeight="25.0" minWidth="120.0" prefHeight="25.0" prefWidth="129.0" promptText="Password" styleClass="credentials" unFocusColor="GREY" />
+            <JFXPasswordField fx:id="passwordField" onKeyPressed="#enterLogin" alignment="CENTER" maxWidth="200.0" minHeight="25.0" minWidth="120.0" prefHeight="25.0" prefWidth="129.0" promptText="Password" styleClass="credentials" unFocusColor="GREY" />
          </children>
       </StackPane>
       <StackPane layoutX="2.0" layoutY="34.0" prefHeight="74.0" prefWidth="321.0" AnchorPane.bottomAnchor="241.0" AnchorPane.leftAnchor="96.0" AnchorPane.rightAnchor="96.0" AnchorPane.topAnchor="34.0">
@@ -81,7 +81,7 @@
       </StackPane>
       <StackPane layoutX="102.0" layoutY="119.0" minHeight="37.0" minWidth="126.0" prefHeight="37.0" prefWidth="126.0" AnchorPane.bottomAnchor="193.0" AnchorPane.leftAnchor="99.0" AnchorPane.rightAnchor="99.0" AnchorPane.topAnchor="119.0">
          <children>
-            <JFXTextField fx:id="loginField" alignment="CENTER" maxWidth="200.0" minHeight="25.0" minWidth="120.0" onMouseClicked="#defaultPromptText" prefHeight="25.0" prefWidth="130.0" promptText="Login/Email" styleClass="credentials" unFocusColor="GREY" />
+            <JFXTextField fx:id="loginField" onKeyPressed="#enterNext" alignment="CENTER" maxWidth="200.0" minHeight="25.0" minWidth="120.0" onMouseClicked="#defaultPromptText" prefHeight="25.0" prefWidth="130.0" promptText="Login/Email" styleClass="credentials" unFocusColor="GREY" />
          </children>
       </StackPane>
       <ImageView accessibleRole="BUTTON" fitHeight="25.0" fitWidth="21.0" layoutX="286.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true" styleClass="closeButton">

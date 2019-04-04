@@ -32,6 +32,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -228,4 +230,23 @@ public class LoginViewController implements Initializable {
         loginField.setStyle("-fx-prompt-text-fill: grey;");
     }
 
+    @FXML
+    private void enterNext(KeyEvent event)
+    {
+           if (event.getCode() == KeyCode.ENTER)
+           {
+               passwordField.requestFocus();
+           }
+    }
+
+    @FXML
+    private void enterLogin(KeyEvent event)
+    {
+        if (event.getCode() == KeyCode.ENTER)
+        {
+            String login = loginField.getText();
+            String password = passwordField.getText();
+            login(login, password);
+        }
+    }
 }
