@@ -5,6 +5,7 @@
  */
 package attendance.automation.dal;
 
+import attendance.automation.be.BEException;
 import attendance.automation.be.Person;
 import attendance.automation.be.Student;
 import attendance.automation.be.Teacher;
@@ -15,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import attendance.automation.bll.BLLException;
 import javafx.application.Platform;
 
 import javax.swing.JOptionPane;
@@ -34,7 +36,7 @@ public class UserDAO {
         cp = new ConnectionProvider();
     }
 
-    public boolean checkLogin(String login, String password) throws DALException {
+    public boolean checkLogin(String login, String password) throws DALException, IOException {
         try {
             person = null;
             con = cp.getConnection();
@@ -53,29 +55,36 @@ public class UserDAO {
             if (person == null) {
               return checkIfStudent(login, password, con);
             }
-        } catch (DALException | SQLException | IOException ex) {
+        } catch (DALException | SQLException ex) {
             throw new DALException(ex);
+        } catch (BLLException e) {
+            e.printStackTrace();
         }
         return false;
     }
 
 
-    private boolean checkIfStudent(String login, String password, Connection conection) throws SQLException, IOException, DALException {
-        Connection con = conection;
-        Statement statement = con.createStatement();
-        ResultSet rs = statement.executeQuery("SELECT * FROM Student");
-        while (rs.next()) {
-            String name = rs.getString("UserName");
-            int id = rs.getInt("ID");
-            int classNum = rs.getInt("ClassNum");
-            if (login.equals(name)) {
-                if (password.equals(rs.getString("UserPassword"))) {
-                    person = new Student(name, classNum, id);
-                    return true;
+    private boolean checkIfStudent(String login, String password, Connection conection) throws IOException, DALException {
+        try {
+            Connection con = conection;
+            Statement statement = con.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM Student");
+            while (rs.next()) {
+                String name = rs.getString("UserName");
+                int id = rs.getInt("ID");
+                int classNum = rs.getInt("ClassNum");
+                if (login.equals(name)) {
+                    if (password.equals(rs.getString("UserPassword"))) {
+                        person = new Student(name, classNum, id);
+                        return true;
+                    }
                 }
             }
+            return false;
+        } catch (SQLException | BEException ex)
+        {
+            throw new DALException(ex);
         }
-        return false;
     }
 
 

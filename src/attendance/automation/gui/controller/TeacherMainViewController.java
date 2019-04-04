@@ -11,6 +11,7 @@ import attendance.automation.be.Person;
 import attendance.automation.be.Student;
 import attendance.automation.be.Teacher;
 import attendance.automation.gui.model.AAModel;
+import attendance.automation.gui.model.ModelException;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.animation.FadeTransition;
@@ -21,6 +22,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
@@ -84,8 +87,8 @@ public class TeacherMainViewController implements Initializable {
             Person toCalendar = observableClasses.get(0).getStudentsList().get(0);
             loadCalendar(toCalendar);
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException | ModelException e) {
+            alertMessage(e);
         }
 
         fadeIn(btnExit);
@@ -167,4 +170,9 @@ public class TeacherMainViewController implements Initializable {
         stage.close();
     }
 
+    private void alertMessage(Exception ex)
+    {
+        Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
+        alert.showAndWait();
+    }
 }

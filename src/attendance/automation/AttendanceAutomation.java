@@ -7,6 +7,7 @@ package attendance.automation;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -23,7 +24,6 @@ public class AttendanceAutomation extends Application{
         WindowOpener opener = new WindowOpener(loader);
         stage.setMinWidth(324);
         stage.setMinHeight(400);
-
     }
 
 

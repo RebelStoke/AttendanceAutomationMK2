@@ -8,6 +8,7 @@ package attendance.automation.gui.controller;
 import attendance.automation.WindowOpener;
 import attendance.automation.dal.DALException;
 import attendance.automation.gui.model.AAModel;
+import attendance.automation.gui.model.ModelException;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSpinner;
 
@@ -27,10 +28,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -72,7 +70,7 @@ public class LoginViewController implements Initializable {
             preferences = Preferences.userNodeForPackage(LoginViewController.class);
             aamodel = AAModel.getInstance();
             setRemeberedPassword();
-        } catch (IOException e) {
+        } catch (ModelException e) {
             e.printStackTrace();
         }
         fadeIn(btnExit);
@@ -142,12 +140,13 @@ public class LoginViewController implements Initializable {
                     Thread.sleep(1000);
 
                 }
-            } catch (DALException | InterruptedException ex) {
+            } catch (ModelException | InterruptedException ex) {
                 System.out.println("Error throw");
                 Platform.runLater(this::connectionUnsuccessful);
                 spinner.setVisible(false);
                 btnLogin.setVisible(true);
                 btnLogin.setDisable(false);
+                alertMessage(ex);
             }
         });
         t.start();
@@ -248,5 +247,11 @@ public class LoginViewController implements Initializable {
             String password = passwordField.getText();
             login(login, password);
         }
+    }
+
+    private void alertMessage(Exception ex)
+    {
+        Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
+        alert.showAndWait();
     }
 }

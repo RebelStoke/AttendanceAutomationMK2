@@ -87,7 +87,7 @@ public class DateDAO {
         }
     }
 
-    public void changeAttendance(int studentID, java.sql.Date date, String distinguisher) {
+    public void changeAttendance(int studentID, java.sql.Date date, String distinguisher) throws DALException {
         try {
             Connection con = cp.getConnection();
             String sql = null;
@@ -107,9 +107,8 @@ public class DateDAO {
                 ppst.execute();
             }
 
-        } catch (Exception e) {
-            System.out.println(e.toString());
+    } catch (SQLException e) {
+            throw new DALException(e);
         }
-    }
 
-}
+    }}

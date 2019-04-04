@@ -48,8 +48,12 @@ public class AAManager implements AAFacadeManager {
     }
 
     @Override
-    public boolean checkLogin(String login, String password) throws DALException {
-        return ud.checkLogin(login, password);
+    public boolean checkLogin(String login, String password) throws BLLException, IOException {
+        try {
+            return ud.checkLogin(login, password);
+        } catch (DALException e) {
+            throw new BLLException(e);
+        }
     }
 
     @Override
@@ -69,48 +73,74 @@ public class AAManager implements AAFacadeManager {
     }
 
     @Override
-    public boolean markAttendance(int studentID) throws DALException {
-        LocalDate localDate = LocalDate.now();
-        Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        return dd.markAttendance(studentID, date);
-    }
-
-    @Override
-    public double attendanceRate(Student student) throws DALException {
-        double schoolDays = 0;
-        Calendar c1 = Calendar.getInstance();
-        Calendar c2 = (Calendar) c1.clone();
-        Date date = student.getAttendance().get(0);
-        System.out.println(date.toString());
-        c2.setTime(date);
-        while (c2.before(c1) || c2.equals(c1)) {
-            if (c2.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY
-                    && c2.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-                schoolDays++;
-            }
-            c2.add(Calendar.DATE, 1);
+    public boolean markAttendance(int studentID) throws BLLException {
+        try {
+            LocalDate localDate = LocalDate.now();
+            Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            return dd.markAttendance(studentID, date);
+        } catch (DALException e)
+        {
+            throw new BLLException(e);
         }
-        return dd.getAttendancesForThisMonth(student.getId()) / schoolDays;
     }
 
     @Override
-    public void changeAttendance(int studentID, java.sql.Date date, String distinguisher) {
-        dd.changeAttendance(studentID, date, distinguisher);
+    public double attendanceRate(Student student) throws BLLException {
+        try {
+            double schoolDays = 0;
+            Calendar c1 = Calendar.getInstance();
+            Calendar c2 = (Calendar) c1.clone();
+            Date date = student.getAttendance().get(0);
+            System.out.println(date.toString());
+            c2.setTime(date);
+            while (c2.before(c1) || c2.equals(c1)) {
+                if (c2.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY
+                        && c2.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                    schoolDays++;
+                }
+                c2.add(Calendar.DATE, 1);
+            }
+            return dd.getAttendancesForThisMonth(student.getId()) / schoolDays;
+        } catch (DALException e)
+        {
+            throw new BLLException(e);
+        }
     }
 
     @Override
-    public List<Class> loadTeacherContent(int teacherID) throws DALException, IOException {
-        return td.loadTeacherContent(teacherID);
+    public void changeAttendance(int studentID, java.sql.Date date, String distinguisher) throws BLLException {
+        try {
+            dd.changeAttendance(studentID, date, distinguisher);
+        } catch (DALException e) {
+            throw new BLLException(e);
+        }
     }
 
     @Override
-    public List<Date> loadStudentContent(int studentID) throws DALException {
-        return sd.loadStudentContent(studentID);
+    public List<Class> loadTeacherContent(int teacherID) throws BLLException, IOException {
+        try {
+            return td.loadTeacherContent(teacherID);
+        } catch (DALException e) {
+            throw new BLLException(e);
+        }
     }
 
     @Override
-    public List<Student> loadClassContent(String className) throws IOException, DALException {
-        return cd.loadClassContent(className);
+    public List<Date> loadStudentContent(int studentID) throws BLLException {
+        try {
+            return sd.loadStudentContent(studentID);
+        } catch (DALException e) {
+            throw new BLLException(e);
+        }
+    }
+
+    @Override
+    public List<Student> loadClassContent(String className) throws IOException, BLLException {
+        try {
+            return cd.loadClassContent(className);
+        } catch (DALException e) {
+            throw new BLLException(e);
+        }
     }
 
 

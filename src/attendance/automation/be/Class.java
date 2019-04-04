@@ -6,6 +6,7 @@
 package attendance.automation.be;
 
 import attendance.automation.bll.AAManager;
+import attendance.automation.bll.BLLException;
 import attendance.automation.dal.DALException;
 
 import java.io.IOException;
@@ -31,7 +32,11 @@ public class Class {
     }
 
     private void loadClassContent() throws DALException, IOException {
-        listOfStudents.addAll(manager.loadClassContent(this.name));
+        try {
+            listOfStudents.addAll(manager.loadClassContent(this.name));
+        } catch (BLLException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getName() {

@@ -33,7 +33,7 @@ public class TeacherDAO {
                 listOfClasses.add(new Class(name1, number));
             }
         } catch (SQLException ex) {
-            throw new DALException(ex.getMessage());
+            throw new DALException(ex);
         }
         return listOfClasses;
     }

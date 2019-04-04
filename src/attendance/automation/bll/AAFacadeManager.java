@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface AAFacadeManager {
 
-    boolean checkLogin(String login, String password) throws DALException;
+    boolean checkLogin(String login, String password) throws BLLException, IOException;
 
     void setUser();
 
@@ -21,15 +21,15 @@ public interface AAFacadeManager {
 
     Person getPerson();
 
-    boolean markAttendance(int studentID) throws DALException;
+    boolean markAttendance(int studentID) throws BLLException;
 
-    double attendanceRate(Student student) throws DALException;
+    double attendanceRate(Student student) throws BLLException;
 
-    void changeAttendance(int studentID, java.sql.Date date, String distinguisher);
+    void changeAttendance(int studentID, java.sql.Date date, String distinguisher) throws BLLException;
 
-    List<Class> loadTeacherContent(int teacherID) throws DALException, IOException;
+    List<Class> loadTeacherContent(int teacherID) throws BLLException, IOException;
 
-    List<Date> loadStudentContent(int studentID) throws DALException;
+    List<Date> loadStudentContent(int studentID) throws BLLException;
 
-    List<Student> loadClassContent(String className) throws IOException, DALException;
+    List<Student> loadClassContent(String className) throws IOException, BLLException;
 }

@@ -9,12 +9,15 @@ import attendance.automation.WindowOpener;
 import attendance.automation.be.Student;
 import attendance.automation.dal.DALException;
 import attendance.automation.gui.model.AAModel;
+import attendance.automation.gui.model.ModelException;
 import com.jfoenix.controls.JFXButton;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -67,8 +70,8 @@ public class StudentMainViewController implements Initializable {
             fadeIn(btnLogin);
             mCalendar = Calendar.getInstance();
             loadCalendar();
-        } catch (DALException | IOException ex) {
-            Logger.getLogger(StudentMainViewController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ModelException | IOException | DALException ex) {
+            alertMessage(ex);
         }
 
     }
@@ -87,21 +90,28 @@ public class StudentMainViewController implements Initializable {
         } else {
             attendanceLabel.setText("Today is weekend!");
         }
-
     }
 
     private void calculateAttendanceRate() throws DALException {
-        String string = "Total attendance " + (int) (aamodel.attendanceRate(st) * 100) + "%";
-        attendanceRate.setText(string);
+        try {
+            String string = "Total attendance " + (int) (aamodel.attendanceRate(st) * 100) + "%";
+            attendanceRate.setText(string);
+        } catch (ModelException e) {
+            alertMessage(e);
+        }
     }
 
     private void checkAttendance() throws DALException, IOException {
-        if (aamodel.markAttendance(st.getId())) {
-            attendanceLabel.setText("Attendance marked successfully!");
-            calculateAttendanceRate();
-            loadCalendar();
-        } else {
-            attendanceLabel.setText("Attendance already marked!");
+        try {
+            if (aamodel.markAttendance(st.getId())) {
+                attendanceLabel.setText("Attendance marked successfully!");
+                calculateAttendanceRate();
+                loadCalendar();
+            } else {
+                attendanceLabel.setText("Attendance already marked!");
+            }
+        } catch (ModelException e) {
+            alertMessage(e);
         }
     }
 
@@ -138,4 +148,9 @@ public class StudentMainViewController implements Initializable {
         stage.close();
     }
 
+    private void alertMessage(Exception ex)
+    {
+        Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
+        alert.showAndWait();
+    }
 }

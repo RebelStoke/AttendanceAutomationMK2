@@ -5,10 +5,12 @@
  */
 package attendance.automation.gui.controller;
 
+import attendance.automation.be.BEException;
 import attendance.automation.be.Person;
 import attendance.automation.be.Student;
 import attendance.automation.dal.DALException;
 import attendance.automation.gui.model.AAModel;
+import attendance.automation.gui.model.ModelException;
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -66,8 +68,8 @@ public class CalendarViewController implements Initializable {
             attendance = student.getAttendance();
             attendanceUnitToCalendarList();
             setMonthlyCalendar(calendar);
-        } catch (IOException ex) {
-            Logger.getLogger(CalendarViewController.class.getName()).log(Level.SEVERE, null, ex);
+        }catch (ModelException e) {
+            alertMessage(e);
         }
     }
 
@@ -172,6 +174,7 @@ public class CalendarViewController implements Initializable {
                         ButtonType.NO);
                 a.showAndWait();
                 if (a.getResult() == ButtonType.YES) {
+                    try {
                     if (color.equals(green)) {
                         GridCalendar.getChildren().remove(butt);
                         addButton(x, y, i, red);
@@ -187,11 +190,10 @@ public class CalendarViewController implements Initializable {
                         redButtons--;
                         setMonthAttendanceLabel(this.cal, greenButtons, redButtons);
                     }
-                    try {
                         student.loadStudentContent();
 
-                    } catch (DALException e1) {
-                        e1.printStackTrace();
+                    } catch (BEException | ModelException ex) {
+                        alertMessage(ex);
                     }
                 }
             }
@@ -208,5 +210,9 @@ public class CalendarViewController implements Initializable {
         }
         return false;
     }
-
+    private void alertMessage(Exception ex)
+    {
+        Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
+        alert.showAndWait();
+    }
 }

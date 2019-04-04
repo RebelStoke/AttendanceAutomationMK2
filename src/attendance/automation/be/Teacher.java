@@ -6,6 +6,7 @@
 package attendance.automation.be;
 
 import attendance.automation.bll.AAManager;
+import attendance.automation.bll.BLLException;
 import attendance.automation.dal.ConnectionProvider;
 import attendance.automation.dal.DALException;
 
@@ -26,7 +27,7 @@ public class Teacher implements Person {
     private List<Class> listOfClasses;
     private AAManager manager;
 
-    public Teacher(String name, int id) throws IOException, DALException {
+    public Teacher(String name, int id) throws IOException, DALException, BLLException {
         this.name = name;
         this.id = id;
         listOfClasses = new ArrayList<>();
@@ -34,7 +35,7 @@ public class Teacher implements Person {
         loadTeacherContent();
     }
 
-    public void loadTeacherContent() throws DALException, IOException {
+    public void loadTeacherContent() throws DALException, IOException, BLLException {
         listOfClasses.addAll(manager.loadTeacherContent(this.id));
     }
 

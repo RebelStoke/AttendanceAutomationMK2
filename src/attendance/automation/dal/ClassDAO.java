@@ -1,5 +1,6 @@
 package attendance.automation.dal;
 
+import attendance.automation.be.BEException;
 import attendance.automation.be.Student;
 
 
@@ -13,12 +14,12 @@ public class ClassDAO {
     private final ConnectionProvider cp;
     private final UserDAO uDAO;
 
-    public ClassDAO() throws IOException, IOException {
+    public ClassDAO() throws IOException {
         cp = new ConnectionProvider();
         uDAO = new UserDAO();
     }
 
-    public List<Student> loadClassContent(String className) throws DALException, IOException{
+    public List<Student> loadClassContent(String className) throws IOException, DALException {
         List<Student> listOfStudents = new ArrayList<>();
         try{
             Connection con = cp.getConnection();
@@ -37,6 +38,8 @@ public class ClassDAO {
         }
         catch (SQLException ex) {
             throw new DALException(ex);
+        } catch (BEException e) {
+            e.printStackTrace();
         }
         return listOfStudents;
     }

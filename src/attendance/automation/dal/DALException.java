@@ -1,8 +1,6 @@
 
 package attendance.automation.dal;
 
-import javax.swing.JOptionPane;
-
 /**
  *
  * @author leopo

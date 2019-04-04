@@ -9,6 +9,7 @@ import attendance.automation.bll.AAManager;
 import attendance.automation.dal.ConnectionProvider;
 import attendance.automation.dal.DALException;
 import attendance.automation.gui.model.AAModel;
+import attendance.automation.gui.model.ModelException;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
 import java.io.IOException;
@@ -31,31 +32,44 @@ public class Student extends RecursiveTreeObject<Student> implements Person {
     private AAModel aamodel;
     private int absenceComp;
 
-    public Student(String name, int classNum, int id) throws IOException, DALException {
-        this.name = name;
-        this.classNum = classNum;
-        this.id = id;
-        listOfAttendance = new ArrayList<>();
-        aamodel = AAModel.getInstance();
-        loadStudentContent();
-        setAttendanceOfStudent();
+    public Student(String name, int classNum, int id) throws BEException {
+        try {
+            this.name = name;
+            this.classNum = classNum;
+            this.id = id;
+            listOfAttendance = new ArrayList<>();
+            aamodel = AAModel.getInstance();
+            loadStudentContent();
+            setAttendanceOfStudent();
+        } catch (ModelException e)
+        {
+            throw new BEException(e);
+        }
     }
 
     public List<Date> getAttendance() {
         return listOfAttendance;
     }
 
-    public void loadStudentContent() throws DALException {
-        listOfAttendance.clear();
-        listOfAttendance.addAll(aamodel.loadStudentContent(this.id));
+    public void loadStudentContent() throws BEException {
+        try {
+            listOfAttendance.clear();
+            listOfAttendance.addAll(aamodel.loadStudentContent(this.id));
+        } catch (ModelException e) {
+            throw new BEException(e);
+        }
     }
 
-    private void setAttendanceOfStudent() throws DALException {
-        int attendance = (int) (aamodel.attendanceRate(this) * 100);
+    private void setAttendanceOfStudent() throws BEException {
+        try {
+            int attendance = (int) (aamodel.attendanceRate(this) * 100);
 
-        attendanceOfStudent = attendance + "%";
-        absenceOfStudent = 100 - attendance + "%";
-        absenceComp = attendance;
+            attendanceOfStudent = attendance + "%";
+            absenceOfStudent = 100 - attendance + "%";
+            absenceComp = attendance;
+        } catch (ModelException e) {
+            throw new BEException(e);
+        }
     }
 
     public String getAttendanceOfStudent() {
