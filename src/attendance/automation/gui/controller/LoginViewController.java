@@ -224,7 +224,7 @@ public class LoginViewController implements Initializable {
         loginField.setStyle("-fx-prompt-text-fill: red");
     }
 
-    public void defaultPromptText(MouseEvent mouseEvent) {
+    public void defaultPromptText() {
         loginField.setPromptText("Login/Email");
         loginField.setAlignment(Pos.CENTER);
         loginField.setStyle("-fx-prompt-text-fill: grey;");

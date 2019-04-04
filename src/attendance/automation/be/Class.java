@@ -27,11 +27,11 @@ public class Class {
         this.id = id;
         listOfStudents = new ArrayList<>();
         manager = AAManager.getInstance();
-        loadClassContent(name);
+        loadClassContent();
     }
 
-    private void loadClassContent(String name) throws DALException, IOException {
-        listOfStudents.addAll(manager.loadClassContent(name));
+    private void loadClassContent() throws DALException, IOException {
+        listOfStudents.addAll(manager.loadClassContent(this.name));
     }
 
     public String getName() {

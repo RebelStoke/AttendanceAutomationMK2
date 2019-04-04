@@ -66,8 +66,8 @@ public class AAModel {
         return aaManager.loadStudentContent(studentID);
     }
 
-    public List<Student> loadClassContent(String className) {
-        return loadClassContent(className);
+    public List<Student> loadClassContent(int classID) {
+        return loadClassContent(classID);
     }
 
 

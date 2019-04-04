@@ -83,6 +83,7 @@ public class TeacherMainViewController implements Initializable {
             loadDataToTable(FXCollections.observableArrayList(observableClasses.get(0).getStudentsList()));
             Person toCalendar = observableClasses.get(0).getStudentsList().get(0);
             loadCalendar(toCalendar);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -150,7 +151,6 @@ public class TeacherMainViewController implements Initializable {
     }
 
     private void loadCalendar(Person student) throws IOException {
-        if(calendarController!=null)
         calendarController = new CalendarViewController();
         calendarController.setStudent(student);
         loader = new FXMLLoader(getClass().getResource("/attendance/automation/gui/view/CalendarView.fxml"));
