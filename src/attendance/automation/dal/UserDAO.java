@@ -9,17 +9,13 @@ import attendance.automation.be.BEException;
 import attendance.automation.be.Person;
 import attendance.automation.be.Student;
 import attendance.automation.be.Teacher;
+import attendance.automation.bll.BLLException;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import attendance.automation.bll.BLLException;
-import javafx.application.Platform;
-
-import javax.swing.JOptionPane;
 
 
 /**

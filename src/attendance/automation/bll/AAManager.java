@@ -91,7 +91,6 @@ public class AAManager implements AAFacadeManager {
             Calendar c1 = Calendar.getInstance();
             Calendar c2 = (Calendar) c1.clone();
             Date date = student.getAttendance().get(0);
-            System.out.println(date.toString());
             c2.setTime(date);
             while (c2.before(c1) || c2.equals(c1)) {
                 if (c2.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY

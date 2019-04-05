@@ -8,7 +8,6 @@ package attendance.automation.gui.controller;
 import attendance.automation.be.BEException;
 import attendance.automation.be.Person;
 import attendance.automation.be.Student;
-import attendance.automation.dal.DALException;
 import attendance.automation.gui.model.AAModel;
 import attendance.automation.gui.model.ModelException;
 import com.jfoenix.controls.JFXButton;
@@ -20,11 +19,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 /**
@@ -54,7 +50,8 @@ public class CalendarViewController implements Initializable {
     private Calendar cal;
     private String green;
     private String red;
-
+    private Map<String,Integer> weekDaysAbsence;
+    private TeacherMainViewController teacherController;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
@@ -71,6 +68,14 @@ public class CalendarViewController implements Initializable {
         }catch (ModelException e) {
             alertMessage(e);
         }
+    }
+
+    public void createMap(){
+    weekDaysAbsence.put("Monday",0);
+    weekDaysAbsence.put("Tuesday",0);
+    weekDaysAbsence.put("Wednesday",0);
+    weekDaysAbsence.put("Thursday",0);
+    weekDaysAbsence.put("Friday",0);
     }
 
     @FXML
@@ -92,6 +97,10 @@ public class CalendarViewController implements Initializable {
     public void setStudent(Person student) {
         this.student = (Student) student;
 
+    }
+
+    public void setTeacherController(TeacherMainViewController controller){
+        this.teacherController = controller;
     }
 
     private void attendanceUnitToCalendarList() {
@@ -132,7 +141,6 @@ public class CalendarViewController implements Initializable {
             } else if (cal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY
                     && cal.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && cal. before(today) && cal
                     .after(firstDay)) {
-
                 addButton(x, y, i, red);
                 redButtons++;
                 map.put(i, datePass(cal));
@@ -182,6 +190,7 @@ public class CalendarViewController implements Initializable {
                         greenButtons--;
                         redButtons++;
                         setMonthAttendanceLabel(this.cal, greenButtons, redButtons);
+                        teacherController.setTableExternally();
                     } else if (color.equals(red)) {
                         GridCalendar.getChildren().remove(butt);
                         addButton(x, y, i, green);
@@ -189,6 +198,7 @@ public class CalendarViewController implements Initializable {
                         greenButtons++;
                         redButtons--;
                         setMonthAttendanceLabel(this.cal, greenButtons, redButtons);
+                        teacherController.setTableExternally();
                     }
                         student.loadStudentContent();
 
@@ -215,4 +225,6 @@ public class CalendarViewController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
         alert.showAndWait();
     }
+
+
 }

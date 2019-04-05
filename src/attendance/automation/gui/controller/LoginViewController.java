@@ -146,7 +146,7 @@ public class LoginViewController implements Initializable {
                 spinner.setVisible(false);
                 btnLogin.setVisible(true);
                 btnLogin.setDisable(false);
-                alertMessage(ex);
+              //  alertMessage(ex);
             }
         });
         t.start();
@@ -248,10 +248,11 @@ public class LoginViewController implements Initializable {
             login(login, password);
         }
     }
-
+/*
     private void alertMessage(Exception ex)
     {
         Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
         alert.showAndWait();
     }
+    */
 }

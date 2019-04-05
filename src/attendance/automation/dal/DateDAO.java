@@ -7,14 +7,7 @@ package attendance.automation.dal;
 
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.util.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.sql.*;
 
 /**
  * @author Revy
@@ -73,8 +66,6 @@ public class DateDAO {
         try {
             int num = 0;
             Connection con = cp.getConnection();
-           // DateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
-           // Date date = new Date();
             String string = "Select * From StudentAttendance Where StudentID=" + studentID;
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(string);

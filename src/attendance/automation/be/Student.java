@@ -5,14 +5,10 @@
  */
 package attendance.automation.be;
 
-import attendance.automation.bll.AAManager;
-import attendance.automation.dal.ConnectionProvider;
-import attendance.automation.dal.DALException;
 import attendance.automation.gui.model.AAModel;
 import attendance.automation.gui.model.ModelException;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,6 +27,7 @@ public class Student extends RecursiveTreeObject<Student> implements Person {
     private String absenceOfStudent;
     private AAModel aamodel;
     private int absenceComp;
+    private String theMostAbsent;
 
     public Student(String name, int classNum, int id) throws BEException {
         try {
@@ -41,8 +38,7 @@ public class Student extends RecursiveTreeObject<Student> implements Person {
             aamodel = AAModel.getInstance();
             loadStudentContent();
             setAttendanceOfStudent();
-        } catch (ModelException e)
-        {
+        } catch (ModelException e) {
             throw new BEException(e);
         }
     }
@@ -60,7 +56,8 @@ public class Student extends RecursiveTreeObject<Student> implements Person {
         }
     }
 
-    private void setAttendanceOfStudent() throws BEException {
+
+    public void setAttendanceOfStudent() throws BEException {
         try {
             int attendance = (int) (aamodel.attendanceRate(this) * 100);
 
@@ -119,5 +116,13 @@ public class Student extends RecursiveTreeObject<Student> implements Person {
 
     public int compareAbsence(Student absent) {
         return this.getAbsenceComp() - absent.getAbsenceComp();
+    }
+
+    public String getTheMostAbsent() {
+        return theMostAbsent;
+    }
+
+    public void setTheMostAbsent(String theMostAbsent) {
+        this.theMostAbsent = theMostAbsent;
     }
 }

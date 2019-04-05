@@ -6,6 +6,7 @@
 package attendance.automation.gui.controller;
 
 import attendance.automation.WindowOpener;
+import attendance.automation.be.BEException;
 import attendance.automation.be.Student;
 import attendance.automation.dal.DALException;
 import attendance.automation.gui.model.AAModel;
@@ -83,7 +84,7 @@ public class StudentMainViewController implements Initializable {
     }
 
     @FXML
-    private void attendanceButton() throws DALException, IOException {
+    private void attendanceButton() throws DALException, IOException, BEException {
         if (mCalendar.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY
                 && mCalendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
             checkAttendance();
@@ -101,10 +102,11 @@ public class StudentMainViewController implements Initializable {
         }
     }
 
-    private void checkAttendance() throws DALException, IOException {
+    private void checkAttendance() throws DALException, IOException, BEException {
         try {
             if (aamodel.markAttendance(st.getId())) {
                 attendanceLabel.setText("Attendance marked successfully!");
+                st.loadStudentContent();
                 calculateAttendanceRate();
                 loadCalendar();
             } else {

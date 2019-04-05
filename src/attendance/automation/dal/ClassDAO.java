@@ -12,11 +12,9 @@ import java.util.List;
 public class ClassDAO {
 
     private final ConnectionProvider cp;
-    private final UserDAO uDAO;
 
     public ClassDAO() throws IOException {
         cp = new ConnectionProvider();
-        uDAO = new UserDAO();
     }
 
     public List<Student> loadClassContent(String className) throws IOException, DALException {

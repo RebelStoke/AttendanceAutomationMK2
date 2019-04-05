@@ -6,10 +6,8 @@
 package attendance.automation.gui.controller;
 
 import attendance.automation.WindowOpener;
+import attendance.automation.be.*;
 import attendance.automation.be.Class;
-import attendance.automation.be.Person;
-import attendance.automation.be.Student;
-import attendance.automation.be.Teacher;
 import attendance.automation.gui.model.AAModel;
 import attendance.automation.gui.model.ModelException;
 import com.jfoenix.controls.*;
@@ -68,6 +66,9 @@ public class TeacherMainViewController implements Initializable {
     private CalendarViewController calendarController;
     private FXMLLoader loader;
     private WindowOpener opener;
+    private Integer actualClassIndex;
+    int lastSelectedStudentIndex;
+    Student lastSelectedStudent;
     /**
      * Initializes the controller class.
      */
@@ -77,11 +78,13 @@ public class TeacherMainViewController implements Initializable {
         try {
             aamodel = AAModel.getInstance();
             te = (Teacher) aamodel.getPerson();
+            actualClassIndex=0;
             welcomeLabel.setText("Welcome, " + te.getName() + "!");
             listOfClasses = te.getClassesList();
             observableClasses = FXCollections.observableArrayList(listOfClasses);
             selectClass.setItems(observableClasses);
-            selectClass.setPromptText(observableClasses.get(0).getName());
+
+            selectClass.setPromptText(observableClasses.get(actualClassIndex).getName());
             setTableView();
             loadDataToTable(FXCollections.observableArrayList(observableClasses.get(0).getStudentsList()));
             Person toCalendar = observableClasses.get(0).getStudentsList().get(0);
@@ -100,11 +103,13 @@ public class TeacherMainViewController implements Initializable {
     private void setTableView() {
         JFXTreeTableColumn<Student, String> studentName = new JFXTreeTableColumn<>("Student");
         JFXTreeTableColumn<Student, String> studentAbsence = new JFXTreeTableColumn<>("Absence");
+        JFXTreeTableColumn<Student, String> theMostAbsent = new JFXTreeTableColumn<>("The most absent");
 
         studentName.setCellValueFactory(new TreeItemPropertyValueFactory<>("name"));
         studentAbsence.setCellValueFactory(new TreeItemPropertyValueFactory<>("absenceOfStudent"));
+        theMostAbsent.setCellValueFactory(new TreeItemPropertyValueFactory<>("theMostAbsent"));
 
-        tableView.getColumns().addAll(studentName, studentAbsence);
+        tableView.getColumns().addAll(studentName, studentAbsence, theMostAbsent);
         studentSearch.textProperty().addListener((o, oldVal, newVal) -> {
             tableView.setPredicate(student ->
                     String.valueOf(student.getValue().getName()).toLowerCase().contains(newVal.toLowerCase())
@@ -124,6 +129,7 @@ public class TeacherMainViewController implements Initializable {
 
     @FXML
     private void comboBoxOnAction() {
+        actualClassIndex = selectClass.getSelectionModel().getSelectedIndex();
         loadDataToTable(FXCollections.observableArrayList(selectClass.getSelectionModel().getSelectedItem().getStudentsList()));
     }
 
@@ -148,6 +154,7 @@ public class TeacherMainViewController implements Initializable {
     @FXML
     private void selectStudent() throws IOException {
         if (tableView.getSelectionModel().getSelectedItem() != null) {
+            lastSelectedStudentIndex=tableView.getSelectionModel().getSelectedIndex();
             Person selectedStudentCalendar = tableView.getSelectionModel().getSelectedItem().getValue();
             loadCalendar(selectedStudentCalendar);
         }
@@ -156,6 +163,7 @@ public class TeacherMainViewController implements Initializable {
     private void loadCalendar(Person student) throws IOException {
         calendarController = new CalendarViewController();
         calendarController.setStudent(student);
+        calendarController.setTeacherController(this);
         loader = new FXMLLoader(getClass().getResource("/attendance/automation/gui/view/CalendarView.fxml"));
         loader.setController(calendarController);
         paneCalendar.getChildren().clear();
@@ -175,4 +183,18 @@ public class TeacherMainViewController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
         alert.showAndWait();
     }
+
+    public void setTableExternally() throws BEException {
+        lastSelectedStudent = tableView.getSelectionModel().getSelectedItem().getValue();
+        lastSelectedStudent.loadStudentContent();
+        lastSelectedStudent.setAttendanceOfStudent();
+        System.out.println(lastSelectedStudent.getAbsenceOfStudent());
+        tableView.getColumns().clear();
+        setTableView();
+        loadDataToTable(FXCollections.observableArrayList(observableClasses.get(actualClassIndex).getStudentsList()));
+        tableView.getSelectionModel().select(lastSelectedStudentIndex);
+
+    }
+
+
 }
