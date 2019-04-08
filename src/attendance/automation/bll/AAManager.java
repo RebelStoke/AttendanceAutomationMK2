@@ -29,8 +29,21 @@ public class AAManager implements AAFacadeManager {
     private TeacherDAO td;
     private StudentDAO sd;
     private Person person;
+    private List<Date> listOfAttendance;
+
+    private int monday;
+    private int tuesday;
+    private int wednesday;
+    private int thursday;
+    private int friday;
+
 
     public AAManager() throws IOException {
+        monday = 0;
+        tuesday = 0;
+        wednesday = 0;
+        thursday = 0;
+        friday = 0;
         ud = new UserDAO();
         dd = new DateDAO();
         cd = new ClassDAO();
@@ -41,10 +54,8 @@ public class AAManager implements AAFacadeManager {
     public static AAManager getInstance() throws IOException {
         if (manager == null) {
             manager = new AAManager();
-            return manager;
-        } else {
-            return manager;
         }
+        return manager;
     }
 
     @Override
@@ -78,8 +89,7 @@ public class AAManager implements AAFacadeManager {
             LocalDate localDate = LocalDate.now();
             Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
             return dd.markAttendance(studentID, date);
-        } catch (DALException e)
-        {
+        } catch (DALException e) {
             throw new BLLException(e);
         }
     }
@@ -91,17 +101,24 @@ public class AAManager implements AAFacadeManager {
             Calendar c1 = Calendar.getInstance();
             Calendar c2 = (Calendar) c1.clone();
             Date date = student.getAttendance().get(0);
+            Date maybeAbsent;
             c2.setTime(date);
             while (c2.before(c1) || c2.equals(c1)) {
                 if (c2.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY
                         && c2.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                    int year = c2.get(Calendar.YEAR);
+                    int month = c2.get(Calendar.MONTH);
+                    int day = c2.get(Calendar.DAY_OF_MONTH);
+                    maybeAbsent = new GregorianCalendar(year, month, day).getTime();
+                    if (!checkIfDayAbsent(maybeAbsent))
+                        calculateAbsentDays(c2.get(Calendar.DAY_OF_WEEK));
                     schoolDays++;
                 }
                 c2.add(Calendar.DATE, 1);
             }
+
             return dd.getAttendancesForThisMonth(student.getId()) / schoolDays;
-        } catch (DALException e)
-        {
+        } catch (DALException e) {
             throw new BLLException(e);
         }
     }
@@ -127,7 +144,8 @@ public class AAManager implements AAFacadeManager {
     @Override
     public List<Date> loadStudentContent(int studentID) throws BLLException {
         try {
-            return sd.loadStudentContent(studentID);
+            listOfAttendance = sd.loadStudentContent(studentID);
+            return listOfAttendance;
         } catch (DALException e) {
             throw new BLLException(e);
         }
@@ -142,5 +160,49 @@ public class AAManager implements AAFacadeManager {
         }
     }
 
+
+    private boolean checkIfDayAbsent(Date maybeAbsent) {
+        boolean b = false;
+        for (Date day : listOfAttendance) {
+            if (day.equals(maybeAbsent))
+                b = true;
+        }
+        return b;
+    }
+
+    private void calculateAbsentDays(int dayofWeek) {
+        if (dayofWeek == Calendar.MONDAY) monday++;
+        if (dayofWeek == Calendar.TUESDAY) tuesday++;
+        if (dayofWeek == Calendar.WEDNESDAY) wednesday++;
+        if (dayofWeek == Calendar.THURSDAY) thursday++;
+        if (dayofWeek == Calendar.FRIDAY) friday++;
+    }
+
+    public String setMostAbsent() {
+        List<Integer> indexes = new ArrayList<>();
+        List<Integer> weekDays = Arrays.asList(monday, tuesday, wednesday, thursday, friday);
+        int index=-1;
+        int dayAbsenceCount=0;
+        String theMostAbsent = "";
+
+        for (int i = 0; i < 5; i++) {
+        if(weekDays.get(i)>dayAbsenceCount) {
+            indexes.clear();
+            dayAbsenceCount=weekDays.get(i);
+            index = i;
+            indexes.add(index);
+        }else if(weekDays.get(i)==dayAbsenceCount && indexes.size()<=1 && weekDays.get(i)!=0)
+            indexes.add(i);
+        }
+
+        if(!indexes.isEmpty()){
+        if(indexes.contains(0)) theMostAbsent+="Monday ";
+        if(indexes.contains(1)) theMostAbsent+="Tuesday ";
+        if(indexes.contains(2)) theMostAbsent+="Wednesday ";
+        if(indexes.contains(3)) theMostAbsent+="Thursday ";
+        if(indexes.contains(4)) theMostAbsent+="Friday ";}
+        else theMostAbsent="None";
+        return theMostAbsent;
+    }
 
 }

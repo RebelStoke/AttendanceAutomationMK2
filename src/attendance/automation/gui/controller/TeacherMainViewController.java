@@ -32,6 +32,7 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -69,6 +70,7 @@ public class TeacherMainViewController implements Initializable {
     private Integer actualClassIndex;
     int lastSelectedStudentIndex;
     Student lastSelectedStudent;
+    Person toCalendar;
     /**
      * Initializes the controller class.
      */
@@ -87,7 +89,7 @@ public class TeacherMainViewController implements Initializable {
             selectClass.setPromptText(observableClasses.get(actualClassIndex).getName());
             setTableView();
             loadDataToTable(FXCollections.observableArrayList(observableClasses.get(0).getStudentsList()));
-            Person toCalendar = observableClasses.get(0).getStudentsList().get(0);
+            toCalendar = observableClasses.get(0).getStudentsList().get(0);
             loadCalendar(toCalendar);
 
         } catch (IOException | ModelException e) {
@@ -114,6 +116,7 @@ public class TeacherMainViewController implements Initializable {
             tableView.setPredicate(student ->
                     String.valueOf(student.getValue().getName()).toLowerCase().contains(newVal.toLowerCase())
                             || student.getValue().getAttendanceOfStudent().contains(newVal)
+                            || student.getValue().getTheMostAbsent().toLowerCase().contains(newVal.toLowerCase())
             );
         });
 
@@ -188,12 +191,10 @@ public class TeacherMainViewController implements Initializable {
         lastSelectedStudent = tableView.getSelectionModel().getSelectedItem().getValue();
         lastSelectedStudent.loadStudentContent();
         lastSelectedStudent.setAttendanceOfStudent();
-        System.out.println(lastSelectedStudent.getAbsenceOfStudent());
         tableView.getColumns().clear();
         setTableView();
         loadDataToTable(FXCollections.observableArrayList(observableClasses.get(actualClassIndex).getStudentsList()));
         tableView.getSelectionModel().select(lastSelectedStudentIndex);
-
     }
 
 

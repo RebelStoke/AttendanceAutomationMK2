@@ -64,6 +64,8 @@ public class Student extends RecursiveTreeObject<Student> implements Person {
             attendanceOfStudent = attendance + "%";
             absenceOfStudent = 100 - attendance + "%";
             absenceComp = attendance;
+            setTheMostAbsent();
+            System.out.println(theMostAbsent);
         } catch (ModelException e) {
             throw new BEException(e);
         }
@@ -118,11 +120,14 @@ public class Student extends RecursiveTreeObject<Student> implements Person {
         return this.getAbsenceComp() - absent.getAbsenceComp();
     }
 
-    public String getTheMostAbsent() {
+
+
+    public void setTheMostAbsent() {
+        theMostAbsent = aamodel.getMostAbsent();
+    }
+    public String getTheMostAbsent(){
         return theMostAbsent;
     }
 
-    public void setTheMostAbsent(String theMostAbsent) {
-        this.theMostAbsent = theMostAbsent;
-    }
+
 }

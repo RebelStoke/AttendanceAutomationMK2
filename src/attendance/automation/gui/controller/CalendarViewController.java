@@ -50,8 +50,8 @@ public class CalendarViewController implements Initializable {
     private Calendar cal;
     private String green;
     private String red;
-    private Map<String,Integer> weekDaysAbsence;
     private TeacherMainViewController teacherController;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
@@ -70,13 +70,6 @@ public class CalendarViewController implements Initializable {
         }
     }
 
-    public void createMap(){
-    weekDaysAbsence.put("Monday",0);
-    weekDaysAbsence.put("Tuesday",0);
-    weekDaysAbsence.put("Wednesday",0);
-    weekDaysAbsence.put("Thursday",0);
-    weekDaysAbsence.put("Friday",0);
-    }
 
     @FXML
     private void pressButtonPreviousMonth() {
@@ -141,9 +134,11 @@ public class CalendarViewController implements Initializable {
             } else if (cal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY
                     && cal.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && cal. before(today) && cal
                     .after(firstDay)) {
+
                 addButton(x, y, i, red);
                 redButtons++;
                 map.put(i, datePass(cal));
+
             } else {
 
                 addButton(x, y, i, "Grey");
@@ -155,6 +150,10 @@ public class CalendarViewController implements Initializable {
         }
         setMonthAttendanceLabel(this.cal, greenButtons, redButtons);
     }
+
+
+
+
 
     private void setMonthAttendanceLabel(Calendar cal, int greenButtons, int redButtons) {
         labelDate.setText(calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US) + "/" + cal
@@ -220,6 +219,7 @@ public class CalendarViewController implements Initializable {
         }
         return false;
     }
+
     private void alertMessage(Exception ex)
     {
         Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
