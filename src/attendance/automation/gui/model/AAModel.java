@@ -16,8 +16,8 @@ import java.util.List;
 public class AAModel {
     public static AAModel model;
     AAFacadeManager aaManager;
-    public AAModel() throws IOException {
-            aaManager = new AAManager();
+    private AAModel() throws IOException {
+            aaManager = AAManager.getInstance();
     }
 
     public static AAModel getInstance() throws ModelException {
@@ -100,5 +100,9 @@ public class AAModel {
         return loadClassContent(classID);
     }
 
+    public String getMostAbsent(){
+        return aaManager.setMostAbsent();
+
+    }
 
 }

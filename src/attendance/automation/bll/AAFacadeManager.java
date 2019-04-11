@@ -32,4 +32,6 @@ public interface AAFacadeManager {
     List<Date> loadStudentContent(int studentID) throws BLLException;
 
     List<Student> loadClassContent(String className) throws IOException, BLLException;
+    
+    String setMostAbsent();
 }

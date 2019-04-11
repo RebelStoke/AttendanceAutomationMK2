@@ -16,6 +16,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Revy
@@ -38,7 +40,7 @@ public class AAManager implements AAFacadeManager {
     private int friday;
 
 
-    public AAManager() throws IOException {
+    private AAManager() throws IOException {
         monday = 0;
         tuesday = 0;
         wednesday = 0;
@@ -96,31 +98,37 @@ public class AAManager implements AAFacadeManager {
 
     @Override
     public double attendanceRate(Student student) throws BLLException {
-        try {
-            double schoolDays = 0;
-            Calendar c1 = Calendar.getInstance();
-            Calendar c2 = (Calendar) c1.clone();
-            Date date = student.getAttendance().get(0);
-            Date maybeAbsent;
-            c2.setTime(date);
-            while (c2.before(c1) || c2.equals(c1)) {
-                if (c2.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY
-                        && c2.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-                    int year = c2.get(Calendar.YEAR);
-                    int month = c2.get(Calendar.MONTH);
-                    int day = c2.get(Calendar.DAY_OF_MONTH);
-                    maybeAbsent = new GregorianCalendar(year, month, day).getTime();
-                    if (!checkIfDayAbsent(maybeAbsent))
-                        calculateAbsentDays(c2.get(Calendar.DAY_OF_WEEK));
-                    schoolDays++;
-                }
-                c2.add(Calendar.DATE, 1);
+        try
+        {
+            return dd.getAttendancesForThisMonth(student.getId()) / calcSchoolDays(student);
+        } catch (DALException ex)
+        {
+            throw new BLLException(ex);
+        }  
+    }
+    
+    protected double calcSchoolDays(Student student) throws BLLException
+    {
+        double schoolDays = 0;
+        Calendar c1 = Calendar.getInstance();
+        Calendar c2 = (Calendar) c1.clone();
+        Date date = student.getAttendance().get(0);
+        Date maybeAbsent;
+        c2.setTime(date);
+        while (c2.before(c1) || c2.equals(c1)) {
+            if (c2.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY
+                    && c2.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                int year = c2.get(Calendar.YEAR);
+                int month = c2.get(Calendar.MONTH);
+                int day = c2.get(Calendar.DAY_OF_MONTH);
+                maybeAbsent = new GregorianCalendar(year, month, day).getTime();
+                if (!checkIfDayAbsent(maybeAbsent))
+                    calculateAbsentDays(c2.get(Calendar.DAY_OF_WEEK));
+                schoolDays++;
             }
-
-            return dd.getAttendancesForThisMonth(student.getId()) / schoolDays;
-        } catch (DALException e) {
-            throw new BLLException(e);
+            c2.add(Calendar.DATE, 1);
         }
+        return schoolDays;
     }
 
     @Override
@@ -178,6 +186,7 @@ public class AAManager implements AAFacadeManager {
         if (dayofWeek == Calendar.FRIDAY) friday++;
     }
 
+    @Override
     public String setMostAbsent() {
         List<Integer> indexes = new ArrayList<>();
         List<Integer> weekDays = Arrays.asList(monday, tuesday, wednesday, thursday, friday);

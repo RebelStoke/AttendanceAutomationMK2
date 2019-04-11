@@ -23,7 +23,7 @@ public class TeacherDAO {
         List<Class> listOfClasses = new ArrayList<>();
         try {
             Connection con = cp.getConnection();
-            String str = "SELECT Class.ID, ClassName FROM Teacher, TeachersClass, Class WHERE Teacher.ID=TeachersClass.TeacherID AND TeachersClass.ClassID = Class.ID AND TeacherID=?";
+            String str = "SELECT Class.ID, ClassName FROM Teacher, TeacherClass, Class WHERE Teacher.ID=TeacherClass.TeacherID AND TeacherClass.ClassID = Class.ID AND TeacherID=?";
             PreparedStatement ppst = con.prepareStatement(str);
             ppst.setInt(1, tID);
             ResultSet rs = ppst.executeQuery();
